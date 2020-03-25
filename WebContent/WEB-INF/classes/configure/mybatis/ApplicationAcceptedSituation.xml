@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="ApplicationAcceptedSituation">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.applicationAccepted.ApplicationAcceptedSituationReqDto"
+		resultMap="ApplicationAcceptedSituationResDto">
+		SELECT * FROM crosstab(
+		'SELECT CAST(agency_name as text),CASE WHEN status = 3 THEN ''received''
+		ELSE ''registered'' END as status ,cast(count(*) as int) count FROM
+		login_info li INNER JOIN file_info fi ON
+		li.id = fi.login_id INNER JOIN
+		agency_info agency
+		ON li.agency_id = agency.id
+		INNER JOIN
+		status_management sm ON fi.id= sm.file_id
+		WHERE status IN (3,5) and TO_CHAR(status_time,''yyyymmdd'') =
+		TO_CHAR(now(),''yyyymmdd'') and status=status_to
+		GROUP BY
+		agency_name,status ORDER BY agency_name','select ''received'' as
+		status
+		UNION
+		SELECT ''registered'' as status
+		order by 1')
+		AS final_result(agency_name text, received int,registered int)
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+	<resultMap id="ApplicationAcceptedSituationResDto"
+		type="mm.aeon.com.ass.base.dto.applicationAccepted.ApplicationAcceptedSituationResDto">
+		<result property="agencyName" column="agency_name" />
+		<result property="received" column="received" />
+		<result property="registered" column="registered" />
+	</resultMap>
+
+	<select id="count"
+		parameterType="mm.aeon.com.ass.base.dto.applicationAcceptedCount.ApplicationAcceptedSituationCountReqDto"
+		resultType="int">
+		SELECT count(*) FROM crosstab(
+		'SELECT cast(agency_name as text),CASE WHEN status = 3 THEN ''received''
+		ELSE ''registered'' END as status ,cast(count(*) as int) count FROM
+		login_info li 
+		INNER JOIN file_info fi 
+		ON li.id = fi.login_id 
+		INNER JOIN agency_info agency
+		ON li.agency_id = agency.id
+		INNER JOIN status_management sm 
+		ON fi.id= sm.file_id
+		WHERE status IN (3,5) 
+		AND TO_CHAR(status_time,''yyyymmdd'') = TO_CHAR(now(),''yyyymmdd'') 
+		AND status=status_to
+		GROUP BY
+		agency_name,status ORDER BY agency_name','select ''received'' as
+		status
+		UNION
+		SELECT ''registered'' as status
+		order by 1')
+		AS final_result(agency_name text, received int,registered int)
+	</select>
+</mapper>

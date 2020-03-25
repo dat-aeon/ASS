@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AgencyName">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.agencyNameSelectList.AgencyNameSelectListReqDto"
+		resultMap="AgencyNameSelectListResDto">
+		SELECT ID, AGENCY_NAME, LOCATION , ADDRESS
+		FROM AGENCY_INFO
+		<where>
+			<if test="isValid == 1">
+				ISVALID = 1
+			</if>
+		</where>
+		ORDER BY AGENCY_NAME
+	</select>
+
+	<resultMap id="AgencyNameSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.agencyNameSelectList.AgencyNameSelectListResDto">
+		<result property="id" column="id" />
+		<result property="agencyName" column="agency_name" />
+		<result property="location" column="location" />
+		<result property="address" column="address" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,200 @@
+<!--***********************************************************************
+ * $Date : 2018-08-27 $
+ * $Author : Thar Pyae $
+ * $Rev : 0.1  $
+ * Copyright (c) 2018 DIR-ACE Technology Ltd. All Rights Reserved.
+ ***********************************************************************-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('applicationStatus_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="agencyUserListForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="user-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('applicationStatus_title')}">
+							<p:panelGrid styleClass="list-panel-grid">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:100px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column">
+										<p:inputText style="width: auto;"
+											disabled="#{appStatusCheckFormBean.appStatusCheckHeaderBean.disableFlg}"
+											value="#{appStatusCheckFormBean.appStatusCheckHeaderBean.agencyName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:80px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('application_duration')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column">
+										<p:calendar id="fromDate"
+											value="#{appStatusCheckFormBean.appStatusCheckHeaderBean.fromDate}"
+											pattern="yyyy/MM/dd" autocomplete="off" />
+										<label> ~ </label>
+										<p:calendar id="toDate"
+											value="#{appStatusCheckFormBean.appStatusCheckHeaderBean.toDate}"
+											pattern="yyyy/MM/dd" autocomplete="off" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:commandButton
+								style="margin-left:10px; width:133px; float:left; margin-top:1%;"
+								ajax="false" action="#{appStatusCheckFormBean.searchInit()}"
+								value="Search" styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+							<table>
+								<tr>
+									<td><h:outputLabel value="ApplyList"
+											for="applicationStatusList" styleClass="appLabel"
+											rendered="#{appStatusCheckFormBean.lineBeanList.size() != 0}" />
+									</td>
+									<td width="60%" />
+									<td width="40%" align="right"><h:outputText
+											value="#{appStatusCheckFormBean.appStatusCheckHeaderBean.applyRecords}"
+											styleClass="recordStyle" /></td>
+								</tr>
+							</table>
+							<p:poll interval="300"
+								listener="#{appStatusCheckFormBean.search()}"
+								update="applicationStatusList summaryList"
+								stop="#{appStatusCheckFormBean.stop}" />
+							<p:dataTable var="applicationStatus" rowIndexVar="rowIndex"
+								value="#{appStatusCheckFormBean.lineBeanList}"
+								rendered="#{appStatusCheckFormBean.lineBeanList.size() != 0}"
+								paginator="true" rows="10" id="applicationStatusList"
+								style="width:100%;" styleClass="resultAppTable"
+								paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50" paginatorPosition="top">
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('no')}"
+									styleClass="unsort-column" style="width:3%;">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('date')}"
+									sortBy="#{applicationStatus.date}" style="width:9%;">
+									<h:outputText value="#{applicationStatus.date}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('agencyName')}"
+									styleClass="unsort-column" style="width:26%;">
+									<h:outputText value="#{applicationStatus.agencyName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('outletName')}"
+									styleClass="unsort-column" style="width:26%;">
+									<h:outputText value="#{applicationStatus.outletName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('staffName')}"
+									styleClass="unsort-column" style="width:15%;">
+									<h:outputText value="#{applicationStatus.staffName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('customer_name')}"
+									styleClass="unsort-column" style="width:15%;">
+									<h:outputText value="#{applicationStatus.customerName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('type')}"
+									styleClass="unsort-column" >
+									<h:outputText value="#{applicationStatus.type}" />
+								</p:column>
+							</p:dataTable>
+
+							<div style="height: 30px"></div>
+							<table>
+								<tr>
+									<td><h:outputLabel value="Summary"
+											for="applicationStatusList" styleClass="appLabel"
+											rendered="#{appStatusCheckFormBean.sumlineBeanList.size() != 0}" />
+									</td>
+									<td width="60%" />
+									<td width="40%" align="right"><h:outputText
+											value="#{appStatusCheckFormBean.appStatusCheckHeaderBean.summaryRecords}"
+											styleClass="recordStyle" /></td>
+								</tr>
+							</table>
+							<p:dataTable var="applicationSummary"
+								value="#{appStatusCheckFormBean.sumlineBeanList}"
+								rowIndexVar="rowIndex"
+								rendered="#{appStatusCheckFormBean.sumlineBeanList.size() != 0}"
+								paginator="true" rows="10" id="summaryList" style="width:100%;"
+								paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50" paginatorPosition="top"
+								styleClass="resultAppTable">
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('no')}"
+									styleClass="unsort-column" style="width:3%;">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('agentName')}"
+									sortBy="#{applicationSummary.sumAgentName}" style="width:25%;">
+									<h:outputText value="#{applicationSummary.sumAgentName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('outletName')}"
+									sortBy="#{applicationSummary.sumOutletName}" style="width:25%;">
+									<h:outputText value="#{applicationSummary.sumOutletName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('noOfApp')}"
+									sortBy="#{applicationSummary.noOfApp}" style="width:13%;">
+									<h:outputText value="#{applicationSummary.noOfApp}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('first')}"
+									sortBy="#{applicationSummary.first}" style="width:10%;">
+									<h:outputText value="#{applicationSummary.first}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('followup')}"
+									sortBy="#{applicationSummary.followUp}" style="width:10%;">
+									<h:outputText value="#{applicationSummary.followUp}" />
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

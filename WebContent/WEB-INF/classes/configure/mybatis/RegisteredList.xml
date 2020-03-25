@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="RegisteredList">
+
+	<select id="count"
+		parameterType="mm.aeon.com.ass.base.dto.registeredListSelectList.RegisteredListSelectListReqDto"
+		resultType="int">
+		SELECT
+		COUNT (status_time)
+		FROM
+		file_info fi
+		INNER JOIN application_file af
+		ON fi.id=af.file_id
+		INNER JOIN
+		application_info ai
+		ON ai.id=af.application_id
+		INNER JOIN login_info li
+		ON li.id=fi.login_id
+		INNER JOIN agency_info agi
+		ON agi.id=li.agency_id
+		INNER JOIN agency_outlet ao
+		ON ao.id=li.agency_outlet_id
+		INNER JOIN
+		outlet_info oi
+		ON oi.id=ao.outlet_id
+		INNER JOIN status_management sm
+		ON
+		sm.file_id=fi.id
+		<where>
+			fi.status = 5 AND sm.status_to = 5
+
+			<if test="userName != null and userName != ''">
+				AND LOWER(ai.name) LIKE '%' || LOWER(#{userName}) || '%'
+			</if>
+
+			<if test="agencyName != null and agencyName != ''">
+				AND LOWER(agency_name) LIKE '%' || LOWER(#{agencyName})
+				|| '%'
+			</if>
+		</where>
+		<!-- ORDER BY status_time DESC; -->
+	</select>
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.registeredListSelectList.RegisteredListSelectListReqDto"
+		resultMap="RegisteredListSelectListResDto">
+		SELECT
+		status_time, agency_name, outlet_name, ai.name as user_name,
+		file_name
+		,CASE WHEN type = 0 THEN '1st' ELSE 'Follow Up' END as type
+		FROM
+		file_info fi
+		INNER JOIN application_file af
+		ON fi.id=af.file_id
+		INNER JOIN
+		application_info ai
+		ON ai.id=af.application_id
+		INNER JOIN login_info li
+		ON li.id=fi.login_id
+		INNER JOIN agency_info agi
+		ON agi.id=li.agency_id
+		INNER JOIN agency_outlet ao
+		ON ao.id=li.agency_outlet_id
+		INNER JOIN
+		outlet_info oi
+		ON oi.id=ao.outlet_id
+		INNER JOIN status_management sm
+		ON
+		sm.file_id=fi.id
+		<where>
+			fi.status = 5 AND sm.status_to = 5
+
+			<if test="userName != null and userName != ''">
+				AND LOWER(ai.name) LIKE '%' || LOWER(#{userName}) || '%'
+			</if>
+
+			<if test="agencyName != null and agencyName != ''">
+				AND LOWER(agency_name) LIKE '%' || LOWER(#{agencyName})
+				|| '%'
+			</if>
+		</where>
+		
+		<if test="sortField != null and sortField != '' and sortField == 'registrationDate' ">
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'ASCENDING' ">
+				ORDER BY status_time ASC
+			</if>
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'DESCENDING' ">
+				ORDER BY status_time DESC
+			</if>
+		</if>
+		<if test="sortField != null and sortField != '' and sortField == 'agency' ">
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'ASCENDING' ">
+				ORDER BY agency_name ASC
+			</if>
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'DESCENDING' ">
+				ORDER BY agency_name DESC
+			</if>
+		</if>
+		<if test="sortField != null and sortField != '' and sortField == 'outlet' ">
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'ASCENDING' ">
+				ORDER BY outlet_name ASC
+			</if>
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'DESCENDING' ">
+				ORDER BY outlet_name DESC
+			</if>
+		</if>
+		<if test="sortField != null and sortField != '' and sortField == 'user' ">
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'ASCENDING' ">
+				ORDER BY user_name ASC
+			</if>
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'DESCENDING' ">
+				ORDER BY user_name DESC
+			</if>
+		</if>
+		<if test="sortField != null and sortField != '' and sortField == 'fileName' ">
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'ASCENDING' ">
+				ORDER BY file_name ASC
+			</if>
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'DESCENDING' ">
+				ORDER BY file_name DESC
+			</if>
+		</if>
+		<if test="sortField != null and sortField != '' and sortField == 'status' ">
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'ASCENDING' ">
+				ORDER BY type ASC
+			</if>
+			<if test="sortOrder != null and sortOrder != '' and sortOrder == 'DESCENDING' ">
+				ORDER BY type DESC
+			</if>
+		</if>
+		<if test="sortField == null or sortField == ''">
+			ORDER BY status_time DESC
+		</if>
+		<if test="offset != null and limit != null">
+			OFFSET #{offset} LIMIT #{limit}
+		</if>
+		
+	</select>
+
+	<resultMap id="RegisteredListSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.registeredListSelectList.RegisteredListSelectListResDto">
+		<result property="registrationDate" column="status_time" />
+		<result property="agency" column="agency_name" />
+		<result property="outlet" column="outlet_name" />
+		<result property="user" column="user_name" />
+		<result property="fileName" column="file_name" />
+		<result property="status" column="type" />
+	</resultMap>
+</mapper>

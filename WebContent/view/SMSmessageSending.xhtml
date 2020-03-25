@@ -1,0 +1,63 @@
+<!--***********************************************************************
+ * $Date: 2018-11-18$
+ * $Author: Khin Yadanar Thein $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('smsSending_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="smsMessageSend" enctype="multipart/form-data">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="judgementUpload-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('smsSending_title')}">
+
+							<span class="message-style"><pt:messages id="messages" /></span>
+							<p:panelGrid styleClass="status-panel-grid">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('status')}" />
+										<span class="star">✳</span>
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:500px;">
+										<p:inputTextarea rows="5" cols="60" counter="display"
+											id="message" style="resize:none;"
+											value="#{smsMessageSendFormBean.headerBean.message}"
+											maxlength="1000" counterTemplate="{0} characters remaining."
+											autoResize="false" />
+										<br />
+										<h:outputText id="display" />
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+							<p:commandButton value="Send All"
+								style="margin-left: 2%; margin-top:3%;" ajax="false"
+								action="#{smsMessageSendFormBean.send()}" id="searchButton"
+								styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,142 @@
+<!--***********************************************************************
+ * $Date: 2018-06-20$
+ * $Author: Swe Hsu Mon $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('teamList')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="teamSearchform">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('teamList')}">
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;">
+								<p:column styleClass="status-panel-grid-column tblSingleLabel"
+									style="width:200px;">
+									<h:outputText
+										value="#{displayItemBean.getDisplayItemName('teamName')}" />
+								</p:column>
+								<p:column styleClass="status-panel-grid-column">
+									<p:inputText id="name" style="width:200px;"
+										value="#{teamListFormBean.searchHeaderBean.teamName}" />
+								</p:column>
+							</p:panelGrid>
+							<p:commandButton id="searchButton" styleClass="button"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								style="margin: 3px 0px 0px 10px;" ajax="false"
+								action="#{teamListFormBean.search()}" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div style="width: 913px;" class="message-block">
+						<pt:messages />
+					</div>
+					<div>
+						<p:commandButton
+							value="#{displayItemBean.getDisplayItemName('createNewTeam')}"
+							style="width:160px!important" ajax="false"
+							action="#{teamListFormBean.prepareRegister()}"
+							id="createNewButton" styleClass="button" />
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<f:view encoding="utf-8">
+							<p:dataTable var="lineBean"
+								first="#{teamListFormBean.pageFirst}"
+								value="#{teamListFormBean.lazyModel}" rows="50"
+								rendered="#{teamListFormBean.lazyModel != null}" lazy="true"
+								paginator="true" rowIndexVar="rowIndex" paginatorPosition="top"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" styleClass="resultTable"
+								style="width:1070px;margin-left: 10px;" id="teamResultTable">
+
+								<p:column style="width:20px" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column style="width:100px" sortBy="#{lineBean.createdTime}"
+									headerText="#{displayItemBean.getDisplayItemName('date')}">
+									<h:outputText value="#{lineBean.createdTime}">
+										<f:convertDateTime pattern="yyyy/MM/dd" />
+									</h:outputText>
+								</p:column>
+
+								<p:column style="width:300px" sortBy="#{lineBean.teamName}"
+									headerText="#{displayItemBean.getDisplayItemName('teamName')}">
+									<h:outputText value="#{lineBean.teamName}" />
+								</p:column>
+
+								<p:column style="width:90px" sortBy="#{lineBean.target}"
+									headerText="#{displayItemBean.getDisplayItemName('target')}">
+									<h:outputText
+										value="#{teamListFormBean.targetMap.get(lineBean.target)}" />
+								</p:column>
+
+								<p:column style="width:140px" sortBy="#{lineBean.noOfAgent}"
+									headerText="#{displayItemBean.getDisplayItemName('noOfAgentAssign')}">
+									<h:outputText value="#{lineBean.noOfAgent}" />
+								</p:column>
+
+								<p:column style="width:150px" sortBy="#{lineBean.noOfOperator}"
+									headerText="#{displayItemBean.getDisplayItemName('noOfOperatorAssign')}">
+									<h:outputText value="#{lineBean.noOfOperator}" />
+								</p:column>
+
+								<p:column id="actions" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('operation')}">
+									<p:commandLink id="update" styleClass="management-link"
+										action="#{teamListFormBean.prepareUpdate(lineBean)}"
+										disabled="#{teamListFormBean.graterThanZero(lineBean.noOfAgent)}"
+										value="#{displayItemBean.getDisplayItemName('update')}" />
+									<p:commandLink id="detail" styleClass="management-link"
+										action="#{teamListFormBean.prepareDetail(lineBean.teamId)}"
+										value="#{displayItemBean.getDisplayItemName('detail')}" />
+									<p:commandLink id="delete" styleClass="management-link"
+										disabled="#{!teamListFormBean.deletable(lineBean.noOfAgent,lineBean.noOfOperator)}"
+										action="#{teamListFormBean.delete()}"
+										update="teamResultTable"
+										value="#{displayItemBean.getDisplayItemName('delete')}">
+										<p:confirm header="Confirmation"
+											message="Are you sure to delete?" icon="ui-icon-alert" />
+										<f:setPropertyActionListener value="#{lineBean}"
+											target="#{teamListFormBean.lineBean}" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+			styleClass="confirmBox" closable="false">
+			<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes button"
+				icon="ui-icon-check" />
+			<p:commandButton value="No" styleClass="ui-confirmdialog-no button"
+				icon="ui-icon-close" />
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

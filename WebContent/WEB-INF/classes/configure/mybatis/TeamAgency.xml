@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TeamAgency">
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.teamAgencyRegister.TeamAgencyRegisterReqDto">
+		INSERT
+		INTO team_agency
+		(
+		team_id
+		,agency_id
+		,isvalid
+		)
+		VALUES
+		(
+
+		#{teamId}
+		,#{agencyId}
+		,#{isValid}
+
+		)
+	</insert>
+
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.teamAgencyUpdate.TeamAgencyUpdateReqDto">
+		UPDATE
+		team_agency
+		SET
+		<if test="teamId != 0 ">
+			team_id = #{teamId},
+		</if>
+		<if test="nonValid != 2 ">
+			isvalid = #{nonValid},
+		</if>
+		<if test="updatedDate != null">
+			update_time = #{updatedDate}
+		</if>
+		<where>
+			agency_id = #{agencyId}
+			<if test="isValid != 2">
+				AND isvalid = #{isValid}
+			</if>
+			<if test="oldTeamId != 0">
+				AND team_id = #{oldTeamId}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.teamAgencyDelete.TeamAgencyDeleteReqDto">
+		DELETE
+		FROM team_agency
+		<where>
+			agency_id = #{agencyId}
+		</where>
+	</delete>
+
+	<!-- <select id="selectList" parameterType="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailTeamReqDto" 
+		resultMap="AgencyListDetailTeamResDto"> SELECT team_info.team_name From team_info 
+		INNER JOIN team_agency ON team_agency.team_id = team_info.id INNER JOIN agency_info 
+		ON team_agency.agency_id = agency_info.id WHERE agency_info.id = #{agencyId} 
+		AND agency_info.isvalid = 1 </select> <resultMap id="AgencyListDetailTeamResDto" 
+		type="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailTeamResDto"> 
+		<result property="teamName" column="team_name" /> </resultMap> -->
+</mapper>

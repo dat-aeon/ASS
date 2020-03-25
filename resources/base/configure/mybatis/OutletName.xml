@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OutletName">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.outletNameSelectList.OutletNameSelectListReqDto"
+		resultMap="OutletNameSelectListResDto">
+		SELECT ID, OUTLET_NAME, ADDRESS, REMARK
+		FROM OUTLET_INFO
+		<where>
+			ISVALID = 1
+		</where>
+		ORDER BY OUTLET_NAME
+	</select>
+
+	<resultMap id="OutletNameSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.outletNameSelectList.OutletNameSelectListResDto">
+		<result property="id" column="id" />
+		<result property="outletName" column="outlet_name" />
+		<result property="remark" column="remark" />
+		<result property="address" column="address" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.outletNameRefer.OutletNameReferReqDto"
+		resultMap="OutletNameReferResDto">
+		SELECT O.ID, O.OUTLET_NAME
+		FROM OUTLET_INFO O
+		JOIN AGENCY_OUTLET AO
+		ON
+		O.ID = AO.OUTLET_ID
+		<where>
+			<!-- AO.OUTLET_VALID = 1
+			AND O.ISVALID = 1 -->
+		<if test="agencyOutletId != null">
+			AND AO.ID = #{agencyOutletId}
+		</if>
+		</where>
+		
+		ORDER BY O.OUTLET_NAME
+	</select>
+
+	<resultMap id="OutletNameReferResDto"
+		type="mm.aeon.com.ass.base.dto.outletNameRefer.OutletNameReferResDto">
+		<result property="id" column="id" />
+		<result property="outletName" column="outlet_name" />
+	</resultMap>
+
+</mapper>

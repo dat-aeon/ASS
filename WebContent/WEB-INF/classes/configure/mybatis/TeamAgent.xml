@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="TeamAgent">
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.teamDetailAgencySelectList.TeamDetailAgencySelectListReqDto"
+		resultMap="TeamDetailAgencySelectListResDto">
+		SELECT TA.UPDATE_TIME, A.AGENCY_NAME, A.CREATED_BY, A.ISVALID, A.DISABLED_BY 
+		FROM TEAM_AGENCY TA
+		INNER JOIN AGENCY_INFO A ON TA.AGENCY_ID = A.ID
+		<where>
+			<if test="teamId != null and teamId != 0">
+				TA.TEAM_ID = #{teamId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="TeamDetailAgencySelectListResDto"
+		type="mm.aeon.com.ass.base.dto.teamDetailAgencySelectList.TeamDetailAgencySelectListResDto">
+		<result property="assignTime" column="UPDATE_TIME" />
+		<result property="agencyName" column="AGENCY_NAME" />
+		<result property="assignBy" column="CREATED_BY" />
+		<result property="validStatus" column="ISVALID"/>
+		<result property="disabledBy" column="DISABLED_BY"/>
+	</resultMap>
+</mapper>

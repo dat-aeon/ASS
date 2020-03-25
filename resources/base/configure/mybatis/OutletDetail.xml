@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OutletDetail">
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.outletDetailRefer.OutletDetailReferReqDto"
+		resultMap="OutletDetailReferResDto">
+		SELECT O.ID, O.OUTLET_NAME, O.ADDRESS, O.REMARK, O.PHONE_NO, O.IMAGE_PATH, O.LONGITUDE, O.LATITUDE, O.CREATED_BY,
+		O.CREATED_TIME, O.UPDATED_BY, O.UPDATED_TIME, AO.AGENCY_ID,
+		AI.AGENCY_NAME
+		FROM OUTLET_INFO O
+		LEFT JOIN AGENCY_OUTLET AO ON O.ID =
+		AO.OUTLET_ID
+		LEFT JOIN AGENCY_INFO AI ON AO.AGENCY_ID = AI.ID
+		<where>
+			<if test="outletId != null">
+				O.ID = #{outletId}
+			</if>
+		</where>
+	</select>
+	<resultMap id="OutletDetailReferResDto"
+		type="mm.aeon.com.ass.base.dto.outletDetailRefer.OutletDetailReferResDto">
+		<result property="outletId" column="ID" />
+		<result property="outletName" column="OUTLET_NAME" />
+		<result property="address" column="ADDRESS" />
+		<result property="remark" column="REMARK" />
+		<result property="phoneNo" column="PHONE_NO" />
+		<result property="imagePath" column="IMAGE_PATH"/>
+		<result property="longitude" column="LONGITUDE" />
+		<result property="latitude" column="LATITUDE" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="createdTime" column="CREATED_TIME" />
+		<result property="updatedBy" column="UPDATED_BY" />
+		<result property="updatedTime" column="UPDATED_TIME" />
+		<result property="agencyId" column="AGENCY_ID" />
+		<result property="agencyName" column="AGENCY_NAME" />
+	</resultMap>
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.outletUserSelectList.OutletUserSelectListReqDto"
+		resultMap="OutletUserSelectListResDto">
+		SELECT LG.ID, LG.NAME
+		FROM LOGIN_INFO AS LG
+		LEFT JOIN AGENCY_OUTLET AS AO ON AO.ID =
+		LG.AGENCY_OUTLET_ID
+		<where>
+			<if test="outletId != null">
+				AO.OUTLET_ID = #{outletId}
+			</if>
+		</where>
+		ORDER BY LG.NAME
+	</select>
+	<resultMap id="OutletUserSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.outletUserSelectList.OutletUserSelectListResDto">
+		<result property="userId" column="ID" />
+		<result property="userName" column="NAME" />
+	</resultMap>
+</mapper>

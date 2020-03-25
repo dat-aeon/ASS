@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="ReceivingFileList">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.receivingFileList.ReceivingFileListReqDto"
+		resultMap="ReceivingFileListResDto">
+		SELECT s.id,t.received_time,file_name,status
+		FROM file_info f INNER
+		JOIN status_management s ON f.id = s.file_id
+		INNER JOIN time_management
+		t ON f.id=t.file_id
+		<where>
+			s.id IN (SELECT max(sm.id) From status_management sm GROUP BY
+			sm.file_id) AND status IN (3,4,5,6)
+			<if test="fromDate != null">
+				AND TO_CHAR( received_time,'yyyymmdd') >= #{fromDate}
+			</if>
+
+			<if test="toDate != null">
+				AND TO_CHAR( received_time,'yyyymmdd') &lt;= #{toDate}
+			</if>
+
+			<if test="status != 0">
+				AND status = #{status}
+			</if>
+		</where>
+		ORDER BY file_name
+	</select>
+	<resultMap id="ReceivingFileListResDto"
+		type="mm.aeon.com.ass.base.dto.receivingFileList.ReceivingFileListResDto">
+		<result property="receivedTime" column="received_time" />
+		<result property="fileName" column="file_name" />
+		<result property="status" column="status" />
+	</resultMap>
+</mapper>

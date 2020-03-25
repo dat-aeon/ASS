@@ -1,0 +1,179 @@
+<!--***********************************************************************
+ * $Date: 2018-06-20$
+ * $Author: Swe Hsu Mon $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('outletList')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="operatorSearchform">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('outletList')}">
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:110px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('outletName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:170px;">
+										<p:inputText id="outletName" style="width:100%;"
+											value="#{outletListFormBean.searchHeaderBean.outletName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:110px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:170px;">
+										<p:inputText id="agencyName" style="width:100%;"
+											value="#{outletListFormBean.searchHeaderBean.agencyName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:110px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('status')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:105px;">
+										<p:selectOneMenu id="validStatus"
+											value="#{outletListFormBean.searchHeaderBean.validStatus}">
+											<f:selectItems value="#{outletListFormBean.statusList}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton id="searchButton" styleClass="button"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								style="margin: 3px 0px 0px 10px;" ajax="false"
+								action="#{outletListFormBean.search()}" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div style="width: 913px;" class="message-block">
+						<pt:messages />
+					</div>
+					<div>
+						<p:commandButton
+							value="#{displayItemBean.getDisplayItemName('createNewOutlet')}"
+							style="width:160px!important" ajax="false"
+							action="#{outletListFormBean.prepareRegister()}"
+							id="createNewButton" styleClass="button" />
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<f:view encoding="utf-8">
+							<p:dataTable var="lineBean"
+								first="#{outletListFormBean.pageFirst}"
+								value="#{outletListFormBean.lazyModel}" rows="50"
+								rendered="#{outletListFormBean.lazyModel != null}" lazy="true"
+								paginator="true" rowIndexVar="rowIndex" paginatorPosition="top"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" styleClass="resultTable"
+								style="width: 100%; margin-left: 10px;"
+								id="operatorResultTable">
+
+								<p:column style="width:2%" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column style="width:27%" sortBy="#{lineBean.outletName}"
+									headerText="#{displayItemBean.getDisplayItemName('outletName')}">
+									<h:outputText value="#{lineBean.outletName}" />
+								</p:column>
+
+								<p:column style="width:27%" sortBy="#{lineBean.agencyName}"
+									headerText="#{displayItemBean.getDisplayItemName('agencyName')}">
+									<h:outputText value="#{lineBean.agencyName}" />
+								</p:column>
+
+								<p:column style="width:12%" 
+									headerText="#{displayItemBean.getDisplayItemName('mobileTeam')}"
+									sortBy="#{lineBean.mobileTeamName}">
+									<h:outputText value="#{lineBean.mobileTeamName}" />
+								</p:column>
+
+								<p:column style="width:14%" 
+									headerText="#{displayItemBean.getDisplayItemName('nonMobileTeam')}"
+									sortBy="#{lineBean.nonMobileTeamName}">
+									<h:outputText value="#{lineBean.nonMobileTeamName}" />
+								</p:column>
+
+								<p:column style="width:12%"
+									sortBy="#{lineBean.agencyLocation}"
+									headerText="#{displayItemBean.getDisplayItemName('location')}">
+									<h:outputText
+										value="#{outletListFormBean.locationMap.get(lineBean.agencyLocation)}" />
+								</p:column>
+
+								<p:column style="width:25%" id="actions" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('operation')}">
+									<p:commandLink id="update" styleClass="management-link"
+										action="#{outletListFormBean.prepareUpdate(lineBean)}"
+										value="#{displayItemBean.getDisplayItemName('update')}" />
+									<p:commandLink id="changeValid" styleClass="management-link"
+										action="#{outletListFormBean.toggleValidStatus(lineBean)}"
+										value="#{displayItemBean.getDisplayItemName((1 == lineBean.validStatus)?'disable':'enable')}"
+										update="actions" disabled="#{lineBean.isHeadOffice}">
+										<p:confirm header="Confirmation"
+											message="Are you sure to #{(lineBean.validStatus == 1)?'disable':'enable'}?"
+											icon="ui-icon-alert" />
+										<f:setPropertyActionListener value="#{lineBean}"
+											target="#{outletListFormBean.lineBean}" />
+									</p:commandLink>
+									<p:commandLink id="delete" styleClass="management-link"
+										action="#{outletListFormBean.delete()}"
+										update="operatorResultTable" disabled="#{lineBean.isHeadOffice}"
+										value="#{displayItemBean.getDisplayItemName('delete')}">
+										<p:confirm header="Confirmation"
+											message="Are you sure to delete?" icon="ui-icon-alert" />
+										<f:setPropertyActionListener value="#{lineBean}"
+											target="#{outletListFormBean.lineBean}" />
+									</p:commandLink>
+									<p:commandLink id="detail" styleClass="management-link"
+										action="#{outletListFormBean.prepareDetail(lineBean.outletId)}"
+										value="#{displayItemBean.getDisplayItemName('detail')}">
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+			styleClass="confirmBox" closable="false"
+			style="background-color:#302873">
+			<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes button"
+				icon="ui-icon-check" />
+			<p:commandButton value="No" styleClass="ui-confirmdialog-no button"
+				icon="ui-icon-close" />
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="LeadTimeReport">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.leadTimeReport.LeadTimeReportReqDto"
+		resultMap="LeadTimeReportResDto">
+		SELECT * FROM
+			(SELECT name,nrc,type,agency_name, application_no, outlet_name
+				,array_to_string(array_agg(apply),' ') apply
+				,array_to_string(array_agg(finish),' ') finish
+				,array_to_string(array_agg(sent),' ') sent
+				,array_to_string(array_agg(received),' ') received
+				,array_to_string(array_agg(registering),' ') registering
+				,array_to_string(array_agg(registered),' ') registered
+			FROM
+				(
+				SELECT fi.id, ai.name,ai.nrc,ag.agency_name,ai.application_no,oi.outlet_name
+					,CASE WHEN type =0 THEN '1st' ELSE 'Follow Up' END as type
+					,CASE WHEN status_to = 0 then status_time end as apply
+					,CASE WHEN status_to = 1 then status_time end as finish
+					,CASE WHEN status_to = 2 then status_time end as sent
+					,CASE WHEN status_to = 3 then status_time::timestamp(0) end as received
+					,CASE WHEN status_to = 4 then status_time end as registering
+					,CASE WHEN status_to = 5 then status_time end as registered
+				FROM application_info ai 
+				INNER JOIN application_file af ON ai.id = af.application_id 
+				INNER JOIN file_info fi ON af.file_id = fi.id
+				RIGHT JOIN login_info li ON fi.login_id = li.id
+				RIGHT JOIN agency_info ag ON li.agency_id = ag.id
+				INNER JOIN agency_outlet ao ON li.agency_outlet_id = ao.id
+				INNER JOIN outlet_info oi ON ao.outlet_id = oi.id  
+				INNER JOIN status_management sm ON fi.id=sm.file_id
+				) tbl
+			GROUP BY id,name,nrc,type,agency_name,application_no, outlet_name
+			ORDER BY apply DESC )tbl2
+		<where>
+			<if test="fromDate != null">
+				AND to_timestamp(apply,'yyyy-mm-dd HH24:MI') <![CDATA[ >= ]]>
+				to_timestamp(#{fromDate},'yyyy-mm-dd HH24:MI')
+			</if>
+
+			<if test="toDate != null">
+				AND to_timestamp(apply,'yyyy-mm-dd HH24:MI') <![CDATA[ <= ]]>
+				to_timestamp(#{toDate},'yyyy-mm-dd HH24:MI')
+			</if>
+
+			<if test="customerName != null and customerName != ''">
+				AND LOWER(name) LIKE '%' || LOWER(#{customerName}) || '%'
+			</if>
+		</where>
+	</select>
+	<resultMap id="LeadTimeReportResDto"
+		type="mm.aeon.com.ass.base.dto.leadTimeReport.LeadTimeReportResDto">
+		<result property="customerName" column="name" />
+		<result property="nrc" column="nrc" />
+		<result property="agencyName" column="agency_name" />
+		<result property="outletName" column="outlet_name" />
+		<result property="applicationNo" column="application_no"/>
+		<result property="type" column="type" />
+		<result property="applyStarted" column="apply" />
+		<result property="applyFinished" column="finish" />
+		<result property="sent" column="sent" />
+		<result property="received" column="received" />
+		<result property="registering" column="registering" />
+		<result property="registered" column="registered" />
+	</resultMap>
+</mapper>

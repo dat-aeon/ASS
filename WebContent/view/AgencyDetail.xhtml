@@ -1,0 +1,269 @@
+<!--***********************************************************************
+ * $Date: 2018-07-31 $
+ * $Author: Thar Pyae $
+ * $Rev: 0.1 $
+ * Copyright (c) 2018 DIR-ACE Technology Ltd. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title>Agency Detail</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="agencyDetail" enctype="multipart/form-data">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="register-fieldset" legend="Agency Detail">
+							<span class="message-style"><pt:messages /></span>
+							<p:panelGrid styleClass="status-panel-grid" style="width:90%;">
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:400px;">
+										<h:outputText id="agencyname"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.agencyName}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('location')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="location"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.location}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('address')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="address"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.address}" />
+									</p:column>
+								</p:row>
+
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('outletName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<c:choose>
+											<c:when
+												test="#{-1 ne agencyListManagementFormBean.detailParam.priorLinkStack.search('detailOutlet')}">
+												<c:forEach
+													items="#{agencyListManagementFormBean.outletNameLineBeanList}"
+													var="outletNameList">
+													<h:outputText value="#{outletNameList.outletName}"
+														style="display:block" />
+												</c:forEach>
+											</c:when>
+											<c:otherwise>
+												<c:forEach
+													items="#{agencyListManagementFormBean.outletNameLineBeanList}"
+													var="outletNameList">
+													<p:commandLink
+														style="color:blue;text-decoration: none;display:block;"
+														action="#{agencyListManagementFormBean.outletDetail(outletNameList.outletId)}"
+														value="#{outletNameList.outletName}" />
+												</c:forEach>
+											</c:otherwise>
+										</c:choose>
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('userName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<c:choose>
+											<c:when
+												test="#{-1 ne agencyListManagementFormBean.detailParam.priorLinkStack.search('detailAgencyUser')}">
+												<c:forEach
+													items="#{agencyListManagementFormBean.outletNameLineBeanList}"
+													var="userNameList">
+													<h:outputText value="#{userNameList.userName}"
+														style="display:block;" />
+												</c:forEach>
+											</c:when>
+											<c:otherwise>
+												<c:forEach
+													items="#{agencyListManagementFormBean.outletNameLineBeanList}"
+													var="userNameList">
+													<p:commandLink
+														style="color:blue;text-decoration: none;display:block;"
+														action="#{agencyListManagementFormBean.userDetail(userNameList.userId)}"
+														value="#{userNameList.userName}" />
+												</c:forEach>
+											</c:otherwise>
+										</c:choose>
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('teamName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:commandLink style="color:blue;text-decoration: none;"
+											action="#{agencyListManagementFormBean.teamDetail(agencyListManagementFormBean.agencyListManagementHeaderBean.mobileTeamId)}">
+											<h:outputText
+												value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.mobileTeam}"
+												style="color:blue" />
+										</p:commandLink>
+										<br />
+										<p:commandLink style="color:blue;text-decoration: none;"
+											action="#{agencyListManagementFormBean.teamDetail(agencyListManagementFormBean.agencyListManagementHeaderBean.nonMobileTeamId)}">
+											<h:outputText
+												value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.nonMobileTeam}"
+												style="color:blue" />
+										</p:commandLink>
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('roleList')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<c:forEach
+											items="#{agencyListManagementFormBean.agencyListManagementHeaderBean.selectedRole}"
+											varStatus="loop">
+											<h:outputText value="#{loop.current}"
+												style="display:inline; padding-right:10px;" />
+										</c:forEach>
+									</p:column>
+								</p:row>
+								
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('isAeon')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="isAeon"
+											value="#{(agencyListManagementFormBean.agencyListManagementHeaderBean.isAeon)? displayItemBean.getDisplayItemName('yes') : displayItemBean.getDisplayItemName('no')}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('remark')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="remark"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.remark}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('createdBy')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="createdby"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.createdBy}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('createdTime')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="createdtime"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.createdDateShow}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('updatedBy')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="updatedby"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.updatedBy}" />
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('updatedTime')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<h:outputText id="updatedtime"
+											value="#{agencyListManagementFormBean.agencyListManagementHeaderBean.updDateShow}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							
+							<p:spacer width="100%" height="0"/>
+
+							<p:commandButton style="margin-top: 2%;" ajax="false"
+								styleClass="button"
+								value="#{displayItemBean.getDisplayItemName('back')}" id="back"
+								action="#{agencyListManagementFormBean.back()}" />
+						</p:fieldset>
+
+					</div>
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,132 @@
+<!--***********************************************************************
+ * $Date: 2018-08-03$
+ * $Author: Shoon Latt Winne $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title>Application Accepted Situation</title>
+	</ui:define>
+	<script>
+	$(".ui-datatable-tablewrapper").css("overflow","")
+	</script>
+	<ui:define name="body">
+		<h:form id="applicationAcceptedForm">
+			<div>
+				<h1 style="text-align: center;">Application Accepted Situation</h1>
+				<h:outputText value="#{applicationAcceptedFormBean.strDate}"
+					id="dateTime"
+					style="float: right;font-size:22px;font-weight: bold;" />
+				<!-- <p:poll interval="1" async="false"
+					listener="#{applicationAcceptedFormBean.refreshDateTime()}"
+					update="dateTime" /> -->
+				<p:poll interval="30"
+					listener="#{applicationAcceptedFormBean.search()}"
+					update="appAcceptedSituation appAcceptedTotal dateTime" />
+				<div>
+					<pt:messages />
+				</div>
+				<p:dataTable var="appAcceptedSituation"
+					value="#{applicationAcceptedFormBean.line}"
+					rendered="#{applicationAcceptedFormBean.line.size()>0}"
+					styleClass="staffResult" style="overflow:hidden;width:100%"
+					id="appAcceptedSituation">
+
+					<p:column width="30"
+						headerText="#{displayItemBean.getDisplayItemName('no')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedSituation.no}" />
+					</p:column>
+
+					<p:column width="450" 
+						headerText="#{displayItemBean.getDisplayItemName('agent')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedSituation.agencyName}" />
+					</p:column>
+
+					<p:column width="70"
+						headerText="#{displayItemBean.getDisplayItemName('received')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedSituation.received}" />
+					</p:column>
+
+					<p:column width="70" 
+						headerText="#{displayItemBean.getDisplayItemName('registered')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedSituation.registered}" />
+					</p:column>
+				</p:dataTable>
+				<br />
+				<h:outputText
+					style="font-size: 26px;font-weight: bold;display:table; margin-left: auto;margin-right: auto;"
+					rendered="#{applicationAcceptedFormBean.totalLine.size()>0}"
+					value="Today Total" />
+
+				<p:dataTable var="appAcceptedTotal"
+					value="#{applicationAcceptedFormBean.totalLine}"
+					rendered="#{applicationAcceptedFormBean.totalLine.size()>0}"
+					styleClass="staffResult"
+					style="margin-left:10%; margin-right:10%;width: 70%;;font-weight: bold;"
+					id="appAcceptedTotal">
+
+					<p:column width="150">
+						<h:outputText value="#{appAcceptedTotal.location}"
+							style="text-align:left;font-size:20px;font-weight: bold;" />
+					</p:column>
+
+					<p:column width="70"
+						headerText="#{displayItemBean.getDisplayItemName('received')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedTotal.received}"
+							style="text-align:left;font-size:20px;font-weight: bold;" />
+					</p:column>
+
+					<p:column width="70"
+						headerText="#{displayItemBean.getDisplayItemName('registering')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedTotal.registering}"
+							style="text-align:left;font-size:20px;font-weight: bold;" />
+					</p:column>
+
+					<p:column width="70"
+						headerText="#{displayItemBean.getDisplayItemName('registered')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedTotal.registered}"
+							style="text-align:left;font-size:20px;font-weight: bold;" />
+					</p:column>
+
+					<p:column width="70"
+						headerText="#{displayItemBean.getDisplayItemName('notFound')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedTotal.notFound}"
+							rendered="#{appAcceptedTotal.location ne 'Total' or appAcceptedTotal.notFound eq 0}" />
+						<h:commandLink
+							action="#{applicationAcceptedFormBean.goReceivingFile()}"
+							value="#{appAcceptedTotal.notFound}"
+							rendered="#{appAcceptedTotal.location eq 'Total' and appAcceptedTotal.notFound ne 0}"
+							style="color:red;text-align:left;font-size:20px;font-weight: bold;" />
+					</p:column>
+
+					<p:column width="70"
+						headerText="#{displayItemBean.getDisplayItemName('total')}"
+						style="text-align:left;font-size:20px;font-weight: bold;">
+						<h:outputText value="#{appAcceptedTotal.total}"
+							style="text-align:left;font-size:20px;font-weight: bold;" />
+					</p:column>
+				</p:dataTable>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

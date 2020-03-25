@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="ApplicationAcceptedTotal">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.applicationAccepted.ApplicationAcceptedTotalReqDto"
+		resultMap="ApplicationAcceptedTotalResDto">
+		SELECT location,SUM(coalesce("status1",0)) as status1,SUM(coalesce("status2",0)) as status2,SUM(coalesce("status3",0)) as status3,SUM(coalesce("status4",0)) as status4
+		 FROM crosstab( 
+		'SELECT CASE WHEN location = 0 THEN ''${locationYgn}'' ELSE ''${locationMdy}'' END as location,
+			CASE WHEN status=3 THEN ''status1'' 
+			WHEN status=4 THEN ''status2''
+			WHEN status=5 THEN ''status3''
+			WHEN status=6 THEN ''status4'' END as status ,count(location) as count 
+			FROM file_info fi 
+			INNER JOIN application_file af ON fi.id=af.file_id
+			INNER JOIN application_info aif ON aif.id=af.application_id
+			INNER JOIN status_management sm ON fi.id= sm.file_id 
+			INNER JOIN login_info li ON li.id=fi.login_id
+			INNER JOIN agency_outlet ao ON li.agency_outlet_id=ao.id
+			INNER JOIN agency_info ai ON ai.id =ao.agency_id
+			WHERE TO_CHAR(status_time,''yyyymmdd'') = TO_CHAR(now(),''yyyymmdd'') 
+			AND status=status_to AND pl_flag=0
+			GROUP BY location,pl_flag,status 
+		UNION
+		SELECT CASE WHEN pl_flag = 1 THEN ''${typePLoan}'' ELSE ''${typeMLoan}'' END as location,
+			CASE WHEN status=3 THEN ''status1'' 
+			WHEN status=4 THEN ''status2''
+			WHEN status=5 THEN ''status3''
+			WHEN status=6 THEN ''status4'' END as status ,count(location) as count 
+			FROM file_info fi 
+			INNER JOIN application_file af ON fi.id=af.file_id
+			INNER JOIN application_info aif ON aif.id=af.application_id
+			INNER JOIN status_management sm ON fi.id= sm.file_id 
+			INNER JOIN login_info li ON li.id=fi.login_id
+			INNER JOIN agency_outlet ao ON li.agency_outlet_id=ao.id
+			INNER JOIN agency_info ai ON ai.id =ao.agency_id
+			WHERE TO_CHAR(status_time,''yyyymmdd'') = TO_CHAR(now(),''yyyymmdd'') 
+			AND status=status_to AND pl_flag != 0
+			GROUP BY pl_flag,status order by status',
+		'SELECT ''status1'' as status
+		union
+		SELECT ''status2'' as status
+		union
+		SELECT ''status3'' as status
+		union
+		SELECT ''status4'' as status ORDER BY 1')
+		AS final_result(location text,status1 bigint,status2 bigint, status3 bigint ,status4 bigint)
+		GROUP BY location;  
+	</select>
+	<resultMap id="ApplicationAcceptedTotalResDto"
+		type="mm.aeon.com.ass.base.dto.applicationAccepted.ApplicationAcceptedTotalResDto">
+		<result property="location" column="location" />
+		<result property="received" column="status1" />
+		<result property="registering" column="status2" />
+		<result property="registered" column="status3" />
+		<result property="notFound" column="status4" />
+	</resultMap>
+</mapper>

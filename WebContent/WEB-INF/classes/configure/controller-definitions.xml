@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.1.xsd ">
+
+	<!-- ************************************************************************************** 
+		************************ Configuration of Flow Classes. ******************************* 
+		*************************************************************************************** -->
+
+	<bean name="loginController" class="mm.aeon.com.ass.front.login.LoginController"
+		scope="prototype" />
+
+	<bean name="agencyUserListInitController"
+		class="mm.aeon.com.ass.front.agencyUserList.AgencyUserListInitController"
+		scope="prototype" />
+
+	<bean name="agencyUserSearchController"
+		class="mm.aeon.com.ass.front.agencyUserList.AgencyUserSearchController"
+		scope="prototype" />
+
+	<bean name="agencyUserToggleValidController"
+		class="mm.aeon.com.ass.front.agencyUserList.AgencyUserToggleValidController"
+		scope="prototype" />
+
+	<bean name="agencyUserDeleteController"
+		class="mm.aeon.com.ass.front.agencyUserList.AgencyUserDeleteController"
+		scope="prototype" />
+
+	<bean name="agencyUserRegisterInitController"
+		class="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserRegisterInitController"
+		scope="prototype" />
+
+	<bean name="agencyUserUpdateInitController"
+		class="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserUpdateInitController"
+		scope="prototype" />
+
+	<bean name="agencyUserRegisterController"
+		class="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserRegisterController"
+		scope="prototype" />
+
+	<bean name="agencyUserDetailController"
+		class="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserDetailController"
+		scope="prototype" />
+
+	<bean name="InitializePasswordUpdateController"
+		class="mm.aeon.com.ass.front.initializePassword.InitializePasswordUpdateController"
+		scope="prototype" />
+
+	<bean name="receivingFileListController"
+		class="mm.aeon.com.ass.front.receivingFileList.ReceivingFileListController"
+		scope="prototype" />
+
+	<bean name="adminSearchController"
+		class="mm.aeon.com.ass.front.adminList.AdminListSearchController"
+		scope="prototype" />
+
+	<bean name="adminSearhValidStatusToggleController"
+		class="mm.aeon.com.ass.front.adminList.AdminToggleValidController"
+		scope="prototype" />
+
+	<bean name="adminRegisterController"
+		class="mm.aeon.com.ass.front.adminManagement.AdminManagementController"
+		scope="prototype" />
+
+	<bean name="adminDeleteController" class="mm.aeon.com.ass.front.adminList.AdminDeleteController"
+		scope="prototype" />
+
+	<bean name="agencyListInitController"
+		class="mm.aeon.com.ass.front.agencyList.AgencyListInitController"
+		scope="prototype" />
+
+	<bean name="agencyListSearchController"
+		class="mm.aeon.com.ass.front.agencyList.AgencyListSearchController"
+		scope="prototype" />
+
+	<bean name="agencyListChangeValidController"
+		class="mm.aeon.com.ass.front.agencyList.AgencyListChangeValidController"
+		scope="prototype" />
+
+	<bean name="agencyListDeleteController"
+		class="mm.aeon.com.ass.front.agencyList.AgencyListDeleteController"
+		scope="prototype" />
+
+	<bean name="agencyListManagementInitController"
+		class="mm.aeon.com.ass.front.agencyListManagement.AgencyListManagementInitController"
+		scope="prototype" />
+
+	<bean name="agencyRegisterController"
+		class="mm.aeon.com.ass.front.agencyListManagement.AgencyRegisterController"
+		scope="prototype" />
+
+	<bean name="agencyListUpdateController"
+		class="mm.aeon.com.ass.front.agencyListManagement.AgencyListUpdateController"
+		scope="prototype" />
+
+	<bean name="agencyListDetailController"
+		class="mm.aeon.com.ass.front.agencyListManagement.AgencyListDetailController"
+		scope="prototype" />
+
+	<bean name="receivedListController"
+		class="mm.aeon.com.ass.front.receivedList.ReceivedListController"
+		scope="prototype" />
+
+	<bean name="leadTimeReportController"
+		class="mm.aeon.com.ass.front.leadTimeReport.LeadTimeReportController"
+		scope="prototype" />
+
+	<bean name="applicationAcceptedController"
+		class="mm.aeon.com.ass.front.applicationAccepted.ApplicationAcceptedController"
+		scope="prototype" />
+
+	<bean name="registeredListController"
+		class="mm.aeon.com.ass.front.registeredList.RegisteredListController"
+		scope="prototype" />
+
+	<bean name="operatorSearchController"
+		class="mm.aeon.com.ass.front.operatorList.OperatorListController"
+		scope="prototype" />
+
+	<bean name="operatorManagementInitController"
+		class="mm.aeon.com.ass.front.operatorManagement.OperatorManagementInitController"
+		scope="prototype" />
+
+	<bean name="operatorManagementController"
+		class="mm.aeon.com.ass.front.operatorManagement.OperatorManagementController"
+		scope="prototype" />
+
+	<bean name="operatorToggleValidController"
+		class="mm.aeon.com.ass.front.operatorList.OperatorToggleValidController"
+		scope="prototype" />
+
+	<bean name="operatorDeleteController"
+		class="mm.aeon.com.ass.front.operatorList.OperatorDeleteController"
+		scope="prototype" />
+
+	<bean name="teamSearchController" class="mm.aeon.com.ass.front.teamList.TeamListController"
+		scope="prototype" />
+
+	<bean name="teamManagementController"
+		class="mm.aeon.com.ass.front.teamManagement.TeamManagementController"
+		scope="prototype" />
+
+	<bean name="teamDeleteController" class="mm.aeon.com.ass.front.teamList.TeamDeleteController"
+		scope="prototype" />
+
+	<bean name="teamDetailController" class="mm.aeon.com.ass.front.teamList.TeamDetailController"
+		scope="prototype" />
+
+	<bean name="applicationStatusController"
+		class="mm.aeon.com.ass.front.applicationStatusCheck.ApplicationStatusCheckController"
+		scope="prototype" />
+
+	<bean name="outletListController" class="mm.aeon.com.ass.front.outletList.OutletListController"
+		scope="prototype" />
+
+	<bean name="outletManagementInitController"
+		class="mm.aeon.com.ass.front.outletManagement.OutletManagementInitController"
+		scope="prototype" />
+
+	<bean name="outletManagementController"
+		class="mm.aeon.com.ass.front.outletManagement.OutletManagementController"
+		scope="prototype" />
+
+	<bean name="outletToggleValidController"
+		class="mm.aeon.com.ass.front.outletList.OutletToggleValidController"
+		scope="prototype" />
+		
+	<bean name="outletImageUploadController"
+		class="mm.aeon.com.ass.front.outletManagement.OutletImageUploadController"
+		scope="prototype" />
+
+	<bean name="outletDeleteController"
+		class="mm.aeon.com.ass.front.outletList.OutletDeleteController" scope="prototype" />
+
+	<bean name="outletDetailController"
+		class="mm.aeon.com.ass.front.outletList.OutletDetailController" scope="prototype" />
+
+	<bean name="fileUploadController"
+		class="mm.aeon.com.ass.front.apkUpload.APKUploadUpdateController"
+		scope="prototype" />
+
+	<bean name="messageListController"
+		class="mm.aeon.com.ass.front.messageList.MessageListController" scope="prototype" />
+
+	<bean name="judgementStatusUploadController"
+		class="mm.aeon.com.ass.front.judgementStatusUpload.JudgementStatusUploadController"
+		scope="prototype" />
+
+	<bean name="judgementStatusListController"
+		class="mm.aeon.com.ass.front.judgementStatusList.JudgementStatusListController"
+		scope="prototype" />
+
+	<bean name="smsMessageSendRegisterController"
+		class="mm.aeon.com.ass.front.smsMessageSend.SMSMessageSendRegisterController"
+		scope="prototype" />
+
+	<bean name="flowProcessInvokerInfoRepository"
+		class="mm.com.dat.presto.main.core.front.controller.FlowProcessInvokerInfoRepository">
+		<property name="flowProcessAccessor">
+			<map>
+				<!-- *************************************************************************** 
+					*****************Configuration Controller and Controller Bean************** 
+					*************************************************************************** -->
+				<entry key="mm.aeon.com.ass.front.login.LoginFormBean#login">
+					<ref bean="loginController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserList.AgencyUserListFormBean#init">
+					<ref bean="agencyUserListInitController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserList.AgencyUserListFormBean#listingAgencyUser">
+					<ref bean="agencyUserSearchController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserList.AgencyUserListFormBean#toggleValid">
+					<ref bean="agencyUserToggleValidController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserList.AgencyUserListFormBean#delete">
+					<ref bean="agencyUserDeleteController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserManagementFormBean#init">
+					<ref bean="agencyUserRegisterInitController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserManagementFormBean#registerUser">
+					<ref bean="agencyUserRegisterController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserManagementFormBean#updateInit">
+					<ref bean="agencyUserUpdateInitController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyUserManagement.AgencyUserManagementFormBean#showDetail">
+					<ref bean="agencyUserDetailController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.initializePassword.InitializePasswordFormBean#updatePassword">
+					<ref bean="InitializePasswordUpdateController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.receivingFileList.ReceivingFileListFormBean#search">
+					<ref bean="receivingFileListController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.adminList.AdminListFormBean#search">
+					<ref bean="adminSearchController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.adminManagement.AdminManagementFormBean#register">
+					<ref bean="adminRegisterController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.adminManagement.AdminSearchFormBean#update">
+					<ref bean="adminRegisterController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.adminList.AdminListFormBean#toggleValidStatus">
+					<ref bean="adminSearhValidStatusToggleController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.adminList.AdminListFormBean#delete">
+					<ref bean="adminDeleteController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.agencyList.AgencyListFormBean#init">
+					<ref bean="agencyListInitController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.agencyList.AgencyListFormBean#search">
+					<ref bean="agencyListSearchController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyList.AgencyListFormBean#changeValid">
+					<ref bean="agencyListChangeValidController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.agencyList.AgencyListFormBean#delete">
+					<ref bean="agencyListDeleteController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyListManagement.AgencyListManagementFormBean#init">
+					<ref bean="agencyListManagementInitController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyListManagement.AgencyListManagementFormBean#register">
+					<ref bean="agencyRegisterController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyListManagement.AgencyListManagementFormBean#update">
+					<ref bean="agencyListUpdateController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.agencyListManagement.AgencyListManagementFormBean#detailInit">
+					<ref bean="agencyListDetailController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.receivedList.ReceivedListFormBean#search">
+					<ref bean="receivedListController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.leadTimeReport.LeadTimeReportFormBean#search">
+					<ref bean="leadTimeReportController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.applicationAccepted.ApplicationAcceptedFormBean#search">
+					<ref bean="applicationAcceptedController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.registeredList.RegisteredListFormBean#search">
+					<ref bean="registeredListController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.operatorList.OperatorListFormBean#search">
+					<ref bean="operatorSearchController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.operatorManagement.OperatorManagementFormBean#init">
+					<ref bean="operatorManagementInitController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.operatorManagement.OperatorManagementFormBean#register">
+					<ref bean="operatorManagementController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.operatorManagement.OperatorManagementFormBean#update">
+					<ref bean="operatorManagementController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.operatorList.OperatorListFormBean#toggleValidStatus">
+					<ref bean="operatorToggleValidController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.operatorList.OperatorListFormBean#delete">
+					<ref bean="operatorDeleteController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.teamList.TeamListFormBean#search">
+					<ref bean="teamSearchController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.teamManagement.TeamManagementFormBean#register">
+					<ref bean="teamManagementController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.teamManagement.TeamManagementFormBean#update">
+					<ref bean="teamManagementController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.teamList.TeamListFormBean#delete">
+					<ref bean="teamDeleteController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.teamList.TeamListFormBean#detail">
+					<ref bean="teamDetailController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.applicationStatusCheck.ApplicationStatusCheckFormBean#init">
+					<ref bean="applicationStatusController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.applicationStatusCheck.ApplicationStatusCheckFormBean#search">
+					<ref bean="applicationStatusController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.outletList.OutletListFormBean#search">
+					<ref bean="outletListController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.outletManagement.OutletManagementFormBean#init">
+					<ref bean="outletManagementInitController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.outletManagement.OutletManagementFormBean#register">
+					<ref bean="outletManagementController" />
+				</entry>
+				
+				<entry
+					key="mm.aeon.com.ass.front.outletManagement.OutletManagementFormBean#importImage">
+					<ref bean="outletImageUploadController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.outletManagement.OutletManagementFormBean#update">
+					<ref bean="outletManagementController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.outletList.OutletListFormBean#toggleValidStatus">
+					<ref bean="outletToggleValidController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.outletList.OutletListFormBean#delete">
+					<ref bean="outletDeleteController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.outletList.OutletListFormBean#detail">
+					<ref bean="outletDetailController" />
+				</entry>
+
+				<entry key="mm.aeon.com.ass.front.apkUpload.APKUploadFormBean#upload">
+					<ref bean="fileUploadController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.messageList.MessageListFormBean#search">
+					<ref bean="messageListController" />
+				</entry>
+
+				<entry
+					key="mm.aeon.com.ass.front.judgementStatusUpload.JudgementStatusUploadFormBean#upload">
+					<ref bean="judgementStatusUploadController" />
+				</entry>
+				
+				<entry
+					key="mm.aeon.com.ass.front.judgementStatusList.JudgementStatusListFormBean#search">
+					<ref bean="judgementStatusListController" />
+				</entry>
+				
+				<entry
+					key="mm.aeon.com.ass.front.smsMessageSend.SMSMessageSendFormBean#send">
+					<ref bean="smsMessageSendRegisterController" />
+				</entry>
+			</map>
+		</property>
+
+	</bean>
+
+	<bean name="controllerAccessor"
+		class="mm.com.dat.presto.main.core.front.controller.ControllerAccessor"
+		scope="prototype">
+		<property name="flowProcessInfoInvokerRepository" ref="flowProcessInvokerInfoRepository" />
+		<property name="serviceInvoker" ref="serviceInvoker" />
+		<property name="daoServiceInvoker" ref="daoServiceInvoker" />
+	</bean>
+</beans>

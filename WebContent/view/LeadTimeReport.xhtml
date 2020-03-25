@@ -1,0 +1,214 @@
+<!--***********************************************************************
+ * $Date: 2018-08-03$
+ * $Author: Shoon Latt Winne $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title>Lead Time Report</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="leadTimeReport">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset" legend="Lead Time Report">
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:100px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('customer')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:25%;">
+										<p:inputText id="customerName"
+											value="#{leadTimeReportFormBean.searchHeaderBean.customerName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('duration')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column" colspan="3">
+										<p:calendar id="fromDate"
+											value="#{leadTimeReportFormBean.searchHeaderBean.fromDate}"
+											pattern="yyyy/MM/dd HH:mm" autocomplete="off" />
+										<label> ~ </label>
+										<p:calendar id="toDate"
+											value="#{leadTimeReportFormBean.searchHeaderBean.toDate}"
+											pattern="yyyy/MM/dd HH:mm" autocomplete="off" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton value="Search" style="margin-left: 1%;"
+								ajax="false" action="#{leadTimeReportFormBean.prepareSearch()}"
+								id="searchButton" styleClass="button" process="divExport" />
+
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<pt:messages id="messages" />
+						<h:outputText
+							value="#{leadTimeReportFormBean.searchHeaderBean.record}"
+							styleClass="recordStyle" style="float:right" />
+					</div>
+				</div>
+				<div class="ui-g" style="margin-top: -10px;">
+					<div class="ui-g-12" style="margin-bottom: -50px;">
+						<h:outputLabel value="Application Apply List" style="color:black"
+							class="info_message"
+							rendered="#{leadTimeReportFormBean.line.size()>0}"></h:outputLabel>
+						<p:commandButton value="Export" ajax="false"
+							style="width:80px; float:right; height: 31px;"
+							styleClass="button"
+							rendered="#{leadTimeReportFormBean.line.size()>0}">
+							<p:dataExporter type="xlsxstream"
+								target="ApplicationApplyList,AverageTime"
+								fileName="Lead_Time_Report" />
+						</p:commandButton>
+					</div>
+				</div>
+				<p:poll interval="300" listener="#{leadTimeReportFormBean.search()}"
+					update="ApplicationApplyList AverageTime"
+					stop="#{leadTimeReportFormBean.stop}" />
+
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+							<p:dataTable var="leadTimeReport"
+								value="#{leadTimeReportFormBean.line}" rows="10"
+								rendered="#{leadTimeReportFormBean.line.size()>0}"
+								paginator="true" paginatorPosition="top" rowIndexVar="rowIndex"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,30" styleClass="resultTable"
+								id="ApplicationApplyList">
+
+								<p:column width="25" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column width="120" styleClass="unsort-column"
+									sortBy="#{leadTimeReport.customerName}"
+									headerText="#{displayItemBean.getDisplayItemName('customer')}">
+									<h:outputText value="#{leadTimeReport.customerName}" />
+								</p:column>
+
+								<p:column width="130" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('nrc')}">
+									<h:outputText value="#{leadTimeReport.nrc}" />
+								</p:column>
+								
+								<p:column width="150" styleClass="unsort-column"
+									sortBy="#{leadTimeReport.agencyName}"
+									headerText="#{displayItemBean.getDisplayItemName('agencyName')}">
+									<h:outputText value="#{leadTimeReport.agencyName}" />
+								</p:column>
+								
+								<p:column width="120" styleClass="unsort-column"
+									sortBy="#{leadTimeReport.outletName}"
+									headerText="#{displayItemBean.getDisplayItemName('outletName')}">
+									<h:outputText value="#{leadTimeReport.outletName}" />
+								</p:column>
+								
+								<p:column width="62" styleClass="unsort-column"
+									sortBy="#{leadTimeReport.applicationNo}"
+									headerText="#{displayItemBean.getDisplayItemName('applicationNo')}">
+									<h:outputText value="#{leadTimeReport.applicationNo}" />
+								</p:column>
+								
+								<p:column width="47" styleClass="unsort-column"
+									sortBy="#{leadTimeReport.type}"
+									headerText="#{displayItemBean.getDisplayItemName('type')}">
+									<h:outputText value="#{leadTimeReport.type}" />
+								</p:column>
+
+								<p:column width="78" styleClass="unsort-column"
+									sortBy="#{leadTimeReport.applyStarted}"
+									headerText="#{displayItemBean.getDisplayItemName('applyStarted')}">
+									<h:outputText value="#{leadTimeReport.applyStarted}" />
+								</p:column>
+
+								<p:column width="78" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('applyFinished')}">
+									<h:outputText value="#{leadTimeReport.applyFinished}" />
+								</p:column>
+
+								<p:column width="65" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('sent')}">
+									<h:outputText value="#{leadTimeReport.sent}" />
+								</p:column>
+
+								<p:column width="68" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('received')}">
+									<h:outputText value="#{leadTimeReport.received}" />
+								</p:column>
+
+								<p:column width="64" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('registering')}">
+									<h:outputText value="#{leadTimeReport.registering}" />
+								</p:column>
+
+								<p:column width="60" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('registered')}">
+									<h:outputText value="#{leadTimeReport.registered}" />
+								</p:column>
+							</p:dataTable>
+
+							<h:outputLabel value="Aveage Time" style="color:black"
+								class="info_message"
+								rendered="#{leadTimeReportFormBean.line.size()>0}"></h:outputLabel>
+							<p:dataTable var="averageReport" rowIndexVar="rowIndex"
+								value="#{leadTimeReportFormBean.avgline}" rows="6"
+								rendered="#{leadTimeReportFormBean.avgline.size()>0}"
+								styleClass="resultTable" id="AverageTime">
+
+								<p:column width="30" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column width="100" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('operation')}">
+									<h:outputText value="#{averageReport.operation}" />
+								</p:column>
+
+								<p:column width="120" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('averageAll')}">
+									<h:outputText value="#{averageReport.averageAll}" />
+								</p:column>
+
+								<p:column width="120" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('average1st')}">
+									<h:outputText value="#{averageReport.average1st}" />
+								</p:column>
+
+								<p:column width="120" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('averageFollowUp')}">
+									<h:outputText value="#{averageReport.averageFollowUp}" />
+								</p:column>
+
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

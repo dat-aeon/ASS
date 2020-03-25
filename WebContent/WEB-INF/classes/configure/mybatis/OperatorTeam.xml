@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="OperatorTeam">
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.operatorTeamList.OperatorTeamSelectListReqDto"
+		resultMap="operatorTeamSelectListResDto">
+		SELECT ID, TEAM_NAME, TARGET
+		FROM TEAM_INFO
+		<where>
+			<if test="validStatus != null ">
+				ISVALID = #{validStatus}
+			</if>
+		</where>
+		ORDER BY TEAM_NAME
+	</select>
+	<resultMap id="operatorTeamSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.operatorTeamList.OperatorTeamSelectListResDto">
+		<result property="teamId" column="ID" />
+		<result property="teamName" column="TEAM_NAME" />
+		<result property="target" column="TARGET" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.operatorTeamRefer.OperatorTeamReferReqDto"
+		resultMap="OperatorTeamReferResDto">
+		SELECT ID, ISVALID
+		FROM TEAM_INFO
+		<where>
+			<if test="teamId != null">
+				AND ID = #{teamId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="OperatorTeamReferResDto"
+		type="mm.aeon.com.ass.base.dto.operatorTeamRefer.OperatorTeamReferResDto">
+		<result property="teamId" column="ID" />
+		<result property="isValid" column="ISVALID" />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.operatorTeamRegister.OperatorTeamRegisterReqDto">
+		INSERT INTO
+		TEAM_OPERATOR
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				ISVALID
+			</if>
+			<if test="userId != null">
+				,OPERATOR_ID
+			</if>
+			<if test="teamId != null">
+				,TEAM_ID
+			</if>
+			<if test="updatedTime != null">
+				,UPDATE_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				#{validStatus} 
+			</if>
+			<if test="userId != null">
+				,#{userId}
+			</if>
+			<if test="teamId != null">
+				,#{teamId}
+			</if>
+			<if test="updatedTime != null">
+				,#{updatedTime}
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.operatorTeamUpdate.OperatorTeamUpdateReqDto">
+		UPDATE TEAM_OPERATOR
+		<set>
+			<if test="teamId != null">
+				TEAM_ID = #{teamId},
+			</if>
+			<if test="validStatus != null">
+				ISVALID = #{validStatus},
+			</if>			
+			<if test="updatedTime != null">
+				UPDATE_TIME = #{updatedTime},
+			</if>
+		</set>
+		<where>
+			<if test="id != null and id !=''">
+				ID = #{id}
+			</if>
+			<if test="userId != null">
+				AND OPERATOR_ID = #{userId}
+			</if>
+		</where>
+	</update>
+
+	<select id="selectForUpdate"
+		parameterType="mm.aeon.com.ass.base.dto.operatorTeamSelectForUpdate.OperatorTeamSelectForUpdateReqDto"
+		resultMap="OperatorTeamSelectForUpdateResDto">
+		SELECT ID,UPDATE_TIME
+		FROM TEAM_OPERATOR
+		<where>
+			<if test="teamOperatorId != null">
+				ID = #{teamOperatorId}
+			</if>
+		</where>
+	</select>
+	<resultMap id="OperatorTeamSelectForUpdateResDto"
+		type="mm.aeon.com.ass.base.dto.operatorTeamSelectForUpdate.OperatorTeamSelectForUpdateResDto">
+		<result property="teamOperatorId" column="ID" />
+		<result property="updatedTime" column="UPDATE_TIME" />
+	</resultMap>
+	
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.operatorTeamDelete.OperatorTeamDeleteReqDto">
+		DELETE FROM TEAM_OPERATOR
+		<where>
+			<if test="teamOperatorId != null">
+				ID = #{teamOperatorId}
+			</if>
+			<if test="userId != null">
+				AND OPERATOR_ID = #{userId}
+			</if>
+		</where>
+	</delete>
+</mapper>

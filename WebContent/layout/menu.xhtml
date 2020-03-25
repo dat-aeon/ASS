@@ -1,0 +1,227 @@
+<!--***********************************************************************
+ * $Date: 2018-06-20$
+ * $Author: Khin Yadanar Thein$
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" contentType="text/html">
+	<h:form>
+		<p:menubar>
+			<!-- For Administrator User -->
+			<c:if test="#{userInfo.userTypeName == '1'}">
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('userManagement')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('adminList')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('AdminSearch')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('operatorList')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('OperatorList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('teamList')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('TeamList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('agencyList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('AgencyList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('outletList')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('OutletList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('agencyUserList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('AgencyUserList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('initialize_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('InitializePassword')}" />
+				</p:submenu>
+
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('applicationManagement')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('receivedList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ReceivedList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('registeredList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('RegisteredList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('appStatus_menu_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ApplicationStatus')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('receivingFile_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ReceivingFileList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('leadTimeReport_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('LeadTimeReport')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('applicationAccepted_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ApplicationAccepted')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('judgementStatusUpload_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('JudgementStatusUpload')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('judgementStatusList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('JudgementStatusList')}" />
+				</p:submenu>
+
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('apkUpload')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('apkUpload_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('APKUpload')}" />
+				</p:submenu>
+
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('agencySupportManagement')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('msgContent_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('MsgContent')}" />
+					<p:separator />
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('msgHistory_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('MsgHistory')}" />
+					<p:separator />
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('smsSending_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('SMSMessage')}" />
+				</p:submenu>
+			</c:if>
+
+			<!-- For Operator User -->
+			<c:if test="#{userInfo.userTypeName == '0'}">
+				
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('applicationManagement')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('receivedList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ReceivedList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('registeredList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('RegisteredList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('appStatus_menu_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ApplicationStatus')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('receivingFile_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ReceivingFileList')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('leadTimeReport_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('LeadTimeReport')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('applicationAccepted_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ApplicationAccepted')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('judgementStatusUpload_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('JudgementStatusUpload')}" />
+					<p:separator />
+
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('judgementStatusList_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('JudgementStatusList')}" />
+				</p:submenu>
+
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('agencySupportManagement')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('msgContent_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('MsgContent')}" />
+					<p:separator />
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('msgHistory_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('MsgHistory')}" />
+					
+				</p:submenu>
+			</c:if>
+
+			<!-- For Agency User -->
+			<c:if test="#{userInfo.userTypeName == '2'}">
+				<p:submenu
+					label="#{displayItemBean.getDisplayItemName('applicationManagement')}"
+					icon="ui-icon-gear">
+					<p:menuitem
+						value="#{displayItemBean.getDisplayItemName('appStatus_menu_title')}"
+						icon="ui-icon-search"
+						action="#{mnu001FormBean.propagate('ApplicationStatus')}" />
+				</p:submenu>
+			</c:if>
+		</p:menubar>
+	</h:form>
+</f:view>
+

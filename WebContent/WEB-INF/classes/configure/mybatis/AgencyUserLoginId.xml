@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AgencyUserLoginId">
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.agencyUserLoginIdRefer.AgencyUserLoginIdReferReqDto"
+		resultMap="AgencyUserLoginIdReferResDto">
+		SELECT
+		login_id
+		FROM login_info
+		
+		<where>
+			isvalid = 1
+			<if test="loginId != null and loginId !=''">
+				AND login_id = #{loginId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="AgencyUserLoginIdReferResDto"
+		type="mm.aeon.com.ass.base.dto.agencyUserLoginIdRefer.AgencyUserLoginIdReferResDto">
+		<result property="loginId" column="login_id" />
+	</resultMap>
+</mapper>

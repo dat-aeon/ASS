@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="AdminGroup">
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.adminGroupInsert.AdminGroupInsertReqDto">
+		INSERT INTO
+		ADMIN_GROUP
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="adminId != null and adminId != 0">
+				ADMIN_ID
+			</if>
+			<if test="groupId != null and groupId != 0">
+				,GROUP_ID
+			</if>
+			<if test="finishFlag != null and finishFlag != 0">
+				,FINISH_FLAG
+			</if>
+			<if test="updatedTime != null">
+				,UPDATED_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="adminId != null and adminId != 0">
+				#{adminId}
+			</if>
+			<if test="groupId != null and groupId != 0">
+				,#{groupId}
+			</if>
+			<if test="finishFlag != null and finishFlag != 0">
+				,#{finishFlag}
+			</if>
+			<if test="updatedTime != null">
+				,#{updatedTime}
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.adminGroupDelete.AdminGroupDeleteReqDto">
+		DELETE
+		FROM ADMIN_GROUP
+		<where>
+			<if test="adminId != null and adminId != 0">
+				admin_id = #{adminId}
+			</if>
+			<if test="groupId != null and groupId != 0">
+				group_id = #{groupId}
+			</if>
+		</where>
+	</delete>
+</mapper>

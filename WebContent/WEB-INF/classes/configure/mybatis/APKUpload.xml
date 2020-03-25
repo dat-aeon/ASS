@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="APKUPLOAD">
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.apkUploadInsert.ApkUploadInsertReqDto">
+		INSERT INTO
+		apk_version
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="version != null and version !=''">
+				version
+			</if>
+			<if test="description != null and description !=''">
+				,description
+			</if>
+			<if test="fileName != null and fileName !=''">
+				,file_name
+			</if>
+			<if test="filePath != null and filePath !=''">
+				,file_path
+			</if>
+			<if test="createdBy != null and createdBy !=''">
+				,created_by
+			</if>
+			<if test="createdTime != null">
+				,created_time
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="version != null and version !=''">
+				#{version}
+			</if>
+			<if test="description != null and description !=''">
+				,#{description}
+			</if>
+			<if test="fileName != null and fileName !=''">
+				,#{fileName}
+			</if>
+			<if test="filePath != null and filePath !=''">
+				,#{filePath}
+			</if>
+			<if test="createdBy != null and createdBy !=''">
+				,#{createdBy}
+			</if>
+			<if test="createdTime != null">
+				,#{createdTime}
+			</if>
+		</trim>
+		<!-- (version,description,file_name,created_by,created_time) 
+		VALUES(#{version},#{description},#{fileName},#{createdBy},#{createdTime}) -->
+	</insert>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="ApplicationStatus">
+		
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.applicationStatusCheckList.AppStatusCheckSelectListReqDto"
+		resultMap="AppStatusCheckSelectListResDto">
+		SELECT 
+		received_time
+		,agency_name
+		,outlet_name
+        ,li.name as staff_name
+		,ai.name as customer_name
+		,CASE WHEN type = 0  THEN '1st'
+		 	ELSE 'Follow Up' END as type
+		FROM file_info fi 
+		INNER JOIN application_file af 
+			ON fi.id=af.file_id
+		INNER JOIN application_info ai 
+			ON ai.id=af.application_id
+		INNER JOIN login_info li 
+			ON li.id=fi.login_id
+		INNER JOIN agency_info agi 
+			ON agi.id=li.agency_id
+		INNER JOIN agency_outlet ao 
+			ON ao.id=li.agency_outlet_id
+		INNER JOIN outlet_info oi 
+			ON oi.id=ao.outlet_id
+		INNER JOIN time_management tm 
+			ON tm.file_id=fi.id 
+		<where>
+				 fi.status = 3
+	
+			<if test="agencyName != null and agencyName != ''">
+				AND LOWER(agency_name) LIKE '%' || LOWER(#{agencyName}) || '%'
+			</if>			
+			<if test="fromDate != null">
+				AND to_date(to_char(received_time,'YYYY-MM-DD'),'YYYY-MM-DD') &gt;= #{fromDate}::date
+			</if>
+			<if test="toDate != null">
+				AND to_date(to_char(received_time,'YYYY-MM-DD'),'YYYY-MM-DD') &lt;= #{toDate}::date
+			</if>
+		</where>
+		 ORDER BY received_time DESC
+	</select>
+
+	<resultMap id="AppStatusCheckSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.applicationStatusCheckList.AppStatusCheckSelectListResDto">
+		<result property="date" column="received_time"/>
+		<result property="agencyName" column="agency_name" />
+		<result property="outletName" column="outlet_name" />
+		<result property="staffName" column="staff_name" />
+		<result property="customerName" column="customer_name" />
+		<result property="type" column="type" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.appStatusAgencyRefer.AppStatusAgencyReferReqDto"
+		resultMap="AppStatusAgencyReferResDto">
+		SELECT agency_name
+		FROM agency_info
+		INNER JOIN
+		(
+		SELECT agency_id
+		FROM ass.login_info
+		<where>
+			<if test="loginID != null and loginID != ''"></if>
+			login_id = #{loginID}
+		</where>
+		)AS login
+		ON Login.agency_id = agency_info.id
+	</select>
+	<resultMap id="AppStatusAgencyReferResDto"
+		type="mm.aeon.com.ass.base.dto.appStatusAgencyRefer.AppStatusAgencyReferResDto">
+		<result property="agencyName" column="agency_name" />
+	</resultMap>
+</mapper>

@@ -1,0 +1,155 @@
+<!--***********************************************************************
+ * $Date: 2018-08-03$
+ * $Author: Shoon Latt Winne $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title>Receiving File List</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="receivingFileListForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset"
+							legend="Receiving File List">
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('receivedDate')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column">
+										<p:calendar id="fromDate" pattern="yyyy/MM/dd"
+											value="#{receivingFileListFormBean.searchHeaderBean.fromDate}"
+											autocomplete="off" />
+										<label> ~ </label>
+										<p:calendar id="toDate" pattern="yyyy/MM/dd"
+											value="#{receivingFileListFormBean.searchHeaderBean.toDate}"
+											autocomplete="off" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('status')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column" colspan="3"
+										style="width:20%;">
+										<p:selectOneMenu
+											value="#{receivingFileListFormBean.searchHeaderBean.status}">
+											<f:selectItem itemLabel="All" itemValue="0" />
+											<f:selectItem itemLabel="Received" itemValue="3" />
+											<f:selectItem itemLabel="Registering" itemValue="4" />
+											<f:selectItem itemLabel="Registered" itemValue="5" />
+											<f:selectItem itemLabel="Not Found" itemValue="6" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+							<p:commandButton value="Search" style="margin-left: 1%;"
+								ajax="false"
+								action="#{receivingFileListFormBean.prepareSearch()}"
+								id="searchButton" styleClass="button" />
+
+						</p:fieldset>
+
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<pt:messages id="messages" />
+						<h:outputText
+							value="#{receivingFileListFormBean.searchHeaderBean.record}"
+							styleClass="recordStyle" style="float:right" />
+					</div>
+				</div>
+
+				<div class="ui-g" style="margin-top: -10px;">
+					<div class="ui-g-12" style="margin-bottom: -50px;">
+						<p:commandButton value="Export" ajax="false"
+							style="width:80px; float:right; height: 31px;"
+							styleClass="button"
+							rendered="#{receivingFileListFormBean.line.size()>0}">
+							<p:dataExporter type="xlsxstream" target="receivingFileLists"
+								fileName="Receiving_File_List" />
+						</p:commandButton>
+					</div>
+				</div>
+				<p:poll interval="300"
+					listener="#{receivingFileListFormBean.search()}"
+					update="receivingFileLists"
+					stop="#{receivingFileListFormBean.stop}" />
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+							<p:dataTable var="receivingFile" id="receivingFileLists"
+								value="#{receivingFileListFormBean.line}" rows="50"
+								rendered="#{receivingFileListFormBean.line.size()>0}"
+								paginator="true" paginatorPosition="top" rowIndexVar="rowIndex"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100,150" styleClass="resultTable">
+
+								<p:column width="30" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column width="80" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('date')}">
+									<h:outputText value="#{receivingFile.receivedTime}" />
+								</p:column>
+
+								<p:column width="450" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('fileName')}">
+									<h:outputText value="#{receivingFile.fileName}" />
+								</p:column>
+
+								<p:column width="70" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('backup')}">
+									<h:outputText value="#{receivingFile.backup}" />
+								</p:column>
+
+								<p:column width="70" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('photo')}">
+									<h:outputText value="#{receivingFile.photo}" />
+								</p:column>
+
+								<p:column width="70" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('doing')}">
+									<h:outputText value="#{receivingFile.doing}" />
+								</p:column>
+
+								<p:column width="70" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('done')}">
+									<h:outputText value="#{receivingFile.done}" />
+								</p:column>
+
+								<p:column width="80" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('status')}">
+									<h:outputText value="#{receivingFile.status}" />
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Message">
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.messageSearch.MessageSearchReqDto"
+		resultMap="MessageSearchResDto">
+		SELECT message_content message, send_time, login_id send_by, l.login_id agency_user_name
+			FROM message_info m 
+			INNER JOIN message_group mg ON m.id=mg.message_id 
+			INNER JOIN group_info g ON g.id=mg.group_id 
+			INNER JOIN login_info l ON l.id=m.sender
+			 
+			<where>
+				m.op_send_flag = 0
+				<if test="agencyUserName != null and agencyUserName != ''">
+					AND LOWER(l.login_id) LIKE '%' ||  LOWER(#{agencyUserName}) || '%'
+				</if>
+				<if test="fromDateTime != null">
+					AND send_time &gt;= #{fromDateTime}
+				</if>
+				<if test="toDateTime != null">
+					AND send_time &lt;= #{toDateTime}
+				</if>
+			</where>
+		UNION 
+		SELECT message_content message, send_time,u.login_id send_by,l.login_id agency_user_name
+			FROM message_info m 
+			INNER JOIN message_group mg ON m.id=mg.message_id  
+			INNER JOIN group_info g ON g.id=mg.group_id 
+			INNER JOIN login_info l ON l.id=g.agency_user_id 
+			INNER JOIN management_user_info u ON u.id=m.sender 
+			 
+			<where>
+				m.op_send_flag = 1
+				<if test="agencyUserName != null and agencyUserName != ''">
+					AND LOWER(l.login_id) LIKE '%' ||  LOWER(#{agencyUserName}) || '%'
+				</if>
+				<if test="fromDateTime != null">
+					AND send_time &gt;= #{fromDateTime}
+				</if>
+				<if test="toDateTime != null">
+					AND send_time &lt;= #{toDateTime}
+				</if>
+			</where>
+		ORDER BY send_time DESC
+	</select>
+	<resultMap type="mm.aeon.com.ass.base.dto.messageSearch.MessageSearchResDto" id="MessageSearchResDto">
+		<result property="agencyUserName" column="agency_user_name"/>
+		<result property="sendBy" column="send_by"/>
+		<result property="sentTime" column="send_time"/>
+		<result property="message" column="message"/>
+	</resultMap>
+</mapper>

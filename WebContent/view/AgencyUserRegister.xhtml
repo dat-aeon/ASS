@@ -1,0 +1,427 @@
+<!--***********************************************************************
+ * $Date: 2018-08-07$
+ * $Author: Khin Yadanar Thein $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title>Agency User Management</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="agencyUserRegisterForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="register-fieldset"
+							legend="#{agencyUserManagementFormBean.registerHeaderBean.pageTitle}">
+							<span class="message-style"><pt:messages /></span>
+							<c:if test="#{!agencyUserManagementFormBean.isInitError}">
+								<c:choose>
+									<c:when
+										test="#{agencyUserManagementFormBean.detailParam == null}">
+										<p:panelGrid styleClass="status-panel-grid">
+											<p:row styleClass="status-panel-grid-row">
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel"
+													style="width:170px;">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('userName')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column"
+													style="width:400px;">
+													<p:inputText style="width: 70%;" id="userName"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.userName}" />
+													<p:watermark value="User Name..." for="userName" />
+												</p:column>
+											</p:row>
+											<p:row styleClass="status-panel-grid-row">
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('loginID')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:inputText style="width: 70%;" maxlength="32"
+														id="loginID"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.loginID}" />
+													<p:watermark value="Login ID..." for="loginID" />
+												</p:column>
+											</p:row>
+											<p:row styleClass="status-panel-grid-row">
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('password')}" />
+													<c:if
+														test="#{agencyUserManagementFormBean.updateParam == null}">
+														<span class="star">✳</span>
+													</c:if>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:password style="width: 70%;" maxlength="512"
+														id="password"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.password}" />
+													<p:watermark value="Password..." for="password" />
+												</p:column>
+											</p:row>
+											<p:row styleClass="status-panel-grid-row">
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('confirmPassword')}" />
+													<c:if
+														test="#{agencyUserManagementFormBean.updateParam == null}">
+														<span class="star">✳</span>
+													</c:if>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:password style="width: 70%;" maxlength="512"
+														id="confirmPassword"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.confirmPassword}" />
+													<p:watermark value="Confirm Password..."
+														for="confirmPassword" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:selectOneMenu style="width: 70%; font-size: 10pt;"
+														id="agencyName"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.agencyName}">
+														<p:ajax event="change"
+															listener="#{agencyUserManagementFormBean.setOutletData}"
+															update="outletName"></p:ajax>
+														<f:selectItems
+															value="#{agencyUserManagementFormBean.registerHeaderBean.agencyNameList}" />
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('outletName')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:selectOneMenu style="width: 70%;" id="outletName"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.outletName}">
+														<f:selectItems
+															value="#{agencyUserManagementFormBean.registerHeaderBean.outletNameList}" />
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('startDate')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:calendar styleClass="calendar-input" id="startDate"
+														maxlength="10"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.startDate}"
+														pattern="yyyy/MM/dd" showOn="button"
+														converter="YMDConverter">
+														<p:ajax event="dateSelect"
+															listener="#{agencyUserManagementFormBean.onChangeDate}"
+															update="endDate"></p:ajax>
+													</p:calendar>
+													<p:watermark value="yyyy/MM/dd" for="startDate" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('endDate')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:calendar styleClass="calendar-input" id="endDate"
+														maxlength="10"
+														mindate="#{agencyUserManagementFormBean.registerHeaderBean.endMinDate}"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.endDate}"
+														pattern="yyyy/MM/dd" showOn="button"
+														converter="YMDConverter" />
+													<p:watermark value="yyyy/MM/dd" for="endDate" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('phoneNumber')}" />
+													<span class="star">✳</span>
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:inputText style="width: 50%;" maxlength="32"
+														id="phoneNumber"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.phoneNumber}" />
+													<p:watermark value="09xxxxxxxxxxx" for="phoneNumber" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('email')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:inputText style="width: 50%;" maxlength="128" id="email"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.email}" />
+													<p:watermark value="abc@gmail.com" for="email" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('address')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:inputTextarea maxlength="512" id="address"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.address}"
+														rows="5" cols="100">
+													</p:inputTextarea>
+													<p:watermark value="Address..." for="address" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('remark')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<p:inputTextarea maxlength="512" id="remark"
+														value="#{agencyUserManagementFormBean.registerHeaderBean.remark}"
+														rows="5" cols="100">
+													</p:inputTextarea>
+													<p:watermark value="Remark..." for="remark" />
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+									</c:when>
+
+									<c:otherwise>
+										<p:panelGrid styleClass="status-panel-grid" style="width:90%;">
+											<p:row styleClass="status-panel-grid-row">
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel"
+													style="width:170px;">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('userName')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column"
+													style="width:400px;">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.userName}" />
+												</p:column>
+											</p:row>
+											<p:row styleClass="status-panel-grid-row">
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('loginID')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.loginID}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<c:choose>
+														<c:when
+															test="#{-1 ne agencyUserManagementFormBean.detailParam.priorLinkStack.search('detailAgency')}">
+															<h:outputText
+																value="#{agencyUserManagementFormBean.registerHeaderBean.agencyName}" />
+														</c:when>
+														<c:otherwise>
+															<p:commandLink style="color:blue;text-decoration: none;"
+																value="#{agencyUserManagementFormBean.registerHeaderBean.agencyName}"
+																action="#{agencyUserManagementFormBean.agencyDetail(agencyUserManagementFormBean.registerHeaderBean.agencyId)}">
+															</p:commandLink>
+														</c:otherwise>
+													</c:choose>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('outletName')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.outletName}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('startDate')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.startDate}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('endDate')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.endDate}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('phoneNumber')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.phoneNumber}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('email')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.email}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('address')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.address}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('remark')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.remark}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('createdBy')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.createdBy}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('createdTime')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.createdTime}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('updatedBy')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.updatedBy}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column
+													styleClass="status-panel-grid-column tblSingleLabel">
+													<h:outputLabel
+														value="#{displayItemBean.getDisplayItemName('updatedTime')}" />
+												</p:column>
+												<p:column styleClass="status-panel-grid-column">
+													<h:outputText
+														value="#{agencyUserManagementFormBean.registerHeaderBean.updatedTime}" />
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+									</c:otherwise>
+								</c:choose>
+
+								<p:commandButton style="margin-top: 2%;" styleClass="button"
+									value="#{displayItemBean.getDisplayItemName('register')}"
+									rendered="#{agencyUserManagementFormBean.registerHeaderBean.isRegisterPage}"
+									action="#{agencyUserManagementFormBean.registerUser()}"
+									update="agencyUserRegisterForm" />
+
+								<p:commandButton style="margin-top: 2%;" styleClass="button"
+									value="#{displayItemBean.getDisplayItemName('update')}"
+									rendered="#{agencyUserManagementFormBean.updateParam != null and !agencyUserManagementFormBean.registerHeaderBean.isRegisterPage}"
+									action="#{agencyUserManagementFormBean.registerUser()}" />
+
+								<p:commandButton style="margin-top: 2%;" styleClass="button"
+									value="#{displayItemBean.getDisplayItemName('cancel')}"
+									rendered="#{agencyUserManagementFormBean.detailParam == null}"
+									action="#{agencyUserManagementFormBean.cancel()}" />
+
+							</c:if>
+							<p:commandButton style="margin-top: 2%;" styleClass="button"
+								value="#{displayItemBean.getDisplayItemName('back')}"
+								rendered="#{agencyUserManagementFormBean.detailParam != null}"
+								action="#{agencyUserManagementFormBean.back()}" />
+						</p:fieldset>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,90 @@
+<!--***********************************************************************
+ * $Date: 2018-09-18$
+ * $Author: Shoon Latt Winne $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title>APK Upload</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="apkUpload" enctype="multipart/form-data">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="initialize-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('apkUpload_title')}">
+
+							<span class="message-style"><pt:messages id="messages" /></span>
+							<p:panelGrid styleClass="status-panel-grid" style="width:90%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('version')}" />
+										<span class="star">✳</span>
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:400px;">
+										<p:inputText id="version"
+											value="#{apkUploadFormBean.headerBean.version}" />
+										<p:watermark value="Version..." for="version" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('description')}" />
+										<span class="star">✳</span>
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:400px;">
+										<p:inputTextarea rows="5" cols="60" id="description"
+											maxlength="512"
+											style="margin-top:1%; margin-bottom:1%; resize: none"
+											value="#{apkUploadFormBean.headerBean.description}" />
+										<p:watermark value="Description..." for="description" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('apkFile')}" />
+										<span class="star">✳</span>
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:400px;">
+										<p:fileUpload value="#{apkUploadFormBean.headerBean.file}"
+											id="apkFile" mode="simple" fileLimit="1" update="messages"
+											styleClass="button" allowTypes="/(\.|\/)(apk)" />
+										<!--  <p:fileUpload fileUploadListener="#{apkUploadFormBean.prepareUpload}" fileLimit="1" update="messages" multiple="false" allowTypes="/(\.|\/)(apk)$/" value="#{apkUploadFormBean.headerBean.file}" /> -->
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton value="Upload" style="margin-top: 2%;"
+								ajax="false" action="#{apkUploadFormBean.upload()}"
+								id="searchButton" styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+	</ui:define>
+</ui:composition>

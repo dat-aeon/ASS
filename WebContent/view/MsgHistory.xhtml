@@ -1,0 +1,145 @@
+<!--***********************************************************************
+ * $Date: 2018-06-20$
+ * $Author: Swe Hsu Mon $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('msgHistory_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="messageSearchForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('msgHistory_title')}">
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:110px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('agencyUserName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:170px;">
+										<p:inputText id="agencyUserName" style="width:100%;"
+											value="#{messageListFormBean.searchHeaderBean.agencyUserName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:110px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('application_duration')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column">
+										<p:calendar id="fromDateTime" required="false"
+											value="#{messageListFormBean.searchHeaderBean.fromDateTime}"
+											maxdate="#{messageListFormBean.searchHeaderBean.toDateTime}"
+											pattern="dd/MM/yyyy HH:mm:s" placeholder="dd/MM/yyyy HH:mm:s">
+											<p:ajax event="dateSelect" update="toDateTime" />	
+										</p:calendar>
+										<p:outputLabel value="~"
+											style="font-size: 110%;padding-left:3px;padding-right:3px;color:#302873;font-weight: 900;" />
+										<p:calendar id="toDateTime" required="false"
+											value="#{messageListFormBean.searchHeaderBean.toDateTime}"
+											mindate="#{messageListFormBean.searchHeaderBean.fromDateTime}"
+											pattern="dd/MM/yyyy HH:mm:s" placeholder="dd/MM/yyyy HH:mm:s">
+											<p:ajax event="dateSelect" update="fromDateTime" />
+										</p:calendar>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton id="searchButton" styleClass="button"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								style="margin: 3px 0px 0px 10px;" ajax="false"
+								action="#{messageListFormBean.search()}" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div style="width: 913px;" class="message-block">
+						<pt:messages />
+					</div>
+					<div style="margin-top: 25px;">
+						<p:commandButton id="exportTable" rendered="#{messageListFormBean.lineBeanList.size > 0}"
+							value="#{displayItemBean.getDisplayItemName('export')}"
+							style="width:160px!important" ajax="false"
+							action="#{messageListFormBean.export()}" 
+							styleClass="button">
+							<p:dataExporter type="xlsxstream"
+								target="messageResultTable"
+								fileName="Message_History" />
+						</p:commandButton>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<f:view encoding="utf-8">
+							<p:dataTable  id="messageResultTable" var="lineBean"
+								value="#{messageListFormBean.lineBeanList}" rows="50"
+								rendered="#{messageListFormBean.lineBeanList.size > 0}"
+								paginator="true" rowIndexVar="rowIndex" paginatorPosition="top"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" styleClass="resultTable"
+								resizableColumns="true"
+								style="width: 1070px;margin-left: 10px;margin-top: -37px;">
+
+								<p:column style="width:20px" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column style="width:150px"
+									sortBy="#{lineBean.agencyUserName}"
+									headerText="#{displayItemBean.getDisplayItemName('agencyUserName')}">
+									<h:outputText value="#{lineBean.agencyUserName}" />
+								</p:column>
+
+								<p:column style="width:150px" sortBy="#{lineBean.sendBy}"
+									headerText="#{displayItemBean.getDisplayItemName('sendBy')}">
+									<h:outputText value="#{lineBean.sendBy}" />
+								</p:column>
+
+								<p:column style="width:130px" sortBy="#{lineBean.sentTime}"
+									headerText="#{displayItemBean.getDisplayItemName('sentTime')}">
+									<h:outputText value="#{lineBean.sentTime}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+									</h:outputText>
+								</p:column>
+
+								<p:column sortBy="#{lineBean.message}"
+									headerText="#{displayItemBean.getDisplayItemName('messageDetail')}">
+									<h:outputText value="#{lineBean.message}" />
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+			styleClass="confirmBox" closable="false"
+			style="background-color:#302873">
+			<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes button"
+				icon="ui-icon-check" />
+			<p:commandButton value="No" styleClass="ui-confirmdialog-no button"
+				icon="ui-icon-close" />
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

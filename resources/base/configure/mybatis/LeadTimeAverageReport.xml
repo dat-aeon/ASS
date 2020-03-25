@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="LeadTimeAverageReport">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.leadTimeReport.LeadTimeAverageReportReqDto"
+		resultMap="LeadTimeAverageReportResDto">
+		SELECT CASE WHEN type =0 THEN '1st'
+		ELSE 'Follow Up' END as type,
+		EXTRACT(EPOCH FROM
+		(avg(tbl.finish-tbl.apply))) startToFinished,
+		EXTRACT(EPOCH FROM
+		(avg(sent-tbl.finish))) finishedToSent,
+		EXTRACT(EPOCH FROM
+		(avg(received-sent))) SentToReceived,
+		EXTRACT(EPOCH FROM
+		(avg(registering-received))) ReceivedtoRegistering,
+		EXTRACT(EPOCH
+		FROM
+		(avg(registered-registering))) RegisteringToRegistered,
+		EXTRACT(EPOCH
+		FROM (avg(registered-received))) ReceivedToRegistered
+		FROM
+		(
+		SELECT *
+		FROM crosstab(
+		'SELECT file_id,''status0'' as
+		col,status_time FROM status_management where
+		status_to = 0
+		UNION
+		SELECT
+		file_id,''status1'' as col,status_time FROM status_management where
+		status_to = 1
+		UNION
+		SELECT file_id,''status2'' as col,status_time FROM
+		status_management where
+		status_to = 2
+		UNION
+		SELECT file_id,''status3'' as
+		col,status_time FROM status_management where
+		status_to = 3
+		UNION
+		SELECT
+		file_id,''status4'' as col,status_time FROM status_management where
+		status_to = 4
+		UNION
+		SELECT file_id,''status5'' as col,status_time FROM
+		status_management where
+		status_to = 5 order by 1,2 ')
+		AS
+		final_result(file_id int, apply timestamp,finish timestamp,sent
+		timestamp,received timestamp,registering timestamp,registered
+		timestamp)
+		<where>
+			<if test="fromDate != null">
+				AND TO_CHAR(apply,'yyyy-mm-dd HH24:MI') >= #{fromDate}
+			</if>
+
+			<if test="toDate != null">
+				AND TO_CHAR(apply,'yyyy-mm-dd HH24:MI') &lt;= #{toDate}
+			</if>
+		</where>
+		) as tbl
+		INNER JOIN file_info fi ON tbl.file_id=fi.id INNER JOIN
+		application_file af ON fi.id=af.file_id INNER JOIN application_info ai
+		ON af.application_id=ai.id
+
+		<where>
+			<if test="customerName != null and customerName != ''">
+				AND name LIKE '%' || #{customerName} || '%'
+			</if>
+		</where>
+		group by type
+		order by type
+	</select>
+	<resultMap id="LeadTimeAverageReportResDto"
+		type="mm.aeon.com.ass.base.dto.leadTimeReport.LeadTimeAverageReportResDto">
+		<result property="type" column="type" />
+		<result property="startToFinished" column="startToFinished" />
+		<result property="finishedToSent" column="finishedToSent" />
+		<result property="SentToReceived" column="SentToReceived" />
+		<result property="ReceivedtoRegistering" column="ReceivedtoRegistering" />
+		<result property="RegisteringToRegistered" column="RegisteringToRegistered" />
+		<result property="ReceivedToRegistered" column="ReceivedToRegistered" />
+	</resultMap>
+</mapper>

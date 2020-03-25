@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgencyDetail">
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailReqDto"
+		resultMap="AgencyListDetailResDto">
+		SELECT
+		agency_info.agency_name
+		,agency_info.location
+		,agency_info.address
+		,agency_info.remark
+		,agency_info.isaeon
+		,agency_info.created_by
+		,agency_info.created_time
+		,agency_info.updated_by
+		,agency_info.updated_time
+		,CASE WHEN (agency_info.team_list[1] = '0') THEN team_list[2] ELSE
+		team_list[5] END as mobile_team
+		,CASE WHEN (agency_info.team_list[4] = '1') THEN team_list[5] ELSE
+		team_list[2] END as non_mobile_team
+		,CASE WHEN (agency_info.team_list[1] = '0') THEN team_list[3] ELSE
+		team_list[6] END as mobile_team_id
+		,CASE WHEN (agency_info.team_list[4] = '1') THEN team_list[6] ELSE
+		team_list[3] END as non_mobile_team_id
+		FROM
+		(
+		SELECT
+		a.id
+		,a.agency_name
+		,a.location
+		,a.address
+		,a.remark
+		,a.isaeon
+		,a.created_by
+		,a.created_time
+		,a.updated_by
+		,a.updated_time
+		,regexp_split_to_array(string_agg(concat(target::text ,',', team_name ::text, ',' ,team_id ::text) ,','),',') as team_list
+		FROM agency_info a
+		JOIN team_agency ta
+		ON a.id = ta.agency_id
+		JOIN team_info ti
+		ON ti.id = ta.team_id
+		GROUP BY a.id
+		ORDER BY a.agency_name
+		)AS agency_info
+		<where>
+			<if test="agencyId != 0">
+				AND agency_info.id = #{agencyId}
+			</if>
+		</where>
+
+	</select>
+
+	<resultMap id="AgencyListDetailResDto"
+		type="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailResDto">
+		<result property="agencyName" column="agency_name" />
+		<result property="location" column="location" />
+		<result property="address" column="address" />
+		<result property="remark" column="remark" />
+		<result property="isAeon" column="isaeon" />
+		<result property="createdBy" column="created_by" />
+		<result property="createdDate" column="created_time" />
+		<result property="updatedBy" column="updated_by" />
+		<result property="updatedDate" column="updated_time" />
+		<result property="mobileId" column="mobile_team_id" />
+		<result property="mobileTeam" column="mobile_team" />
+		<result property="nonMobileId" column="non_mobile_team_id" />
+		<result property="nonMobileTeam" column="non_mobile_team" />
+	</resultMap>
+</mapper>

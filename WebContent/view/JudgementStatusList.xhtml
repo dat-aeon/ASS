@@ -1,0 +1,148 @@
+<!--***********************************************************************
+ * $Date : 2018-11-20$
+ * $Author : Khin Yadanar Thein$
+ * $Rev :   $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('judgementStatusList_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="judgementwListForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="received-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('judgementStatusList_title')}">
+							<p:panelGrid styleClass="list-panel-grid" style="width:50%">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:30%;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('status')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:selectOneMenu style="width: 40%;" id="status"
+											value="#{judgementStatusListFormBean.headerBean.status}">
+											<f:selectItems
+												value="#{judgementStatusListFormBean.headerBean.statusList}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('uploadDate')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:calendar id="fromDate" pattern="yyyy/MM/dd"
+											value="#{judgementStatusListFormBean.headerBean.fromDate}"
+											autocomplete="off" converter="YMDConverter" />
+										<label> ~ </label>
+										<p:calendar id="toDate" pattern="yyyy/MM/dd"
+											value="#{judgementStatusListFormBean.headerBean.toDate}"
+											autocomplete="off" converter="YMDConverter" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:commandButton
+								style="margin-left:10px; width:133px; float:left; margin-top:1%;"
+								ajax="false"
+								action="#{judgementStatusListFormBean.searchInit()}"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<table>
+							<tr>
+								<td width="40%"><pt:messages id="messages" /></td>
+								<td />
+								<td width="100%" align="right"><h:outputText
+										value="#{judgementStatusListFormBean.headerBean.record}"
+										styleClass="recordStyle" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+
+							<p:dataTable var="judgementList" rowIndexVar="rowIndex"
+								value="#{judgementStatusListFormBean.lazyModel}"
+								rendered="#{judgementStatusListFormBean.lazyModel != null}"
+								paginator="true" rows="50" id="judgementList"
+								style="width:100%;"
+								paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" paginatorPosition="top" lazy="true"
+								styleClass="receivedTable">
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('no')}"
+									styleClass="unsort-column" style="width:30px;">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('approveOrApplyDate')}"
+									sortBy="#{judgementList.date}" style="width:150px;">
+									<h:outputText value="#{judgementList.date}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('agencyName')}"
+									sortBy="#{judgementList.agencyName}" style="width:250px;">
+									<h:outputText value="#{judgementList.agencyName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('outletName')}"
+									sortBy="#{judgementList.outletName}" style="width:250px;">
+									<h:outputText value="#{judgementList.outletName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('userName')}"
+									sortBy="#{judgementList.userName}" style="width:250px;">
+									<h:outputText value="#{judgementList.userName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('applicationNo')}"
+									sortBy="#{judgementList.applicationNo}" style="width:110px;">
+									<h:outputText value="#{judgementList.applicationNo}"
+										style="text-align:left !important" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('status')}"
+									sortBy="#{judgementList.status}" style="width:100px;">
+									<h:outputText value="#{judgementList.status}" />
+								</p:column>
+							</p:dataTable> 
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

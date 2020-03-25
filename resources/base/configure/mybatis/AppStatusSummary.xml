@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="AppStatusSummary">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.appStatusSummaryList.AppStatusSummaryListReqDto"
+		resultMap="AppStatusSummaryListResDto">
+		SELECT
+		id
+		,agentName
+		,outlet_name
+		,sum(firstData) as firstApply
+		,sum(followup) followup
+		,sum(firstData)+ sum(followup) as total
+		FROM
+		(
+		SELECT
+		agi.id
+		,agi.agency_name as agentName
+		,outlet_name
+		,case when type = 0 then count(fi.id)else 0 end as firstData
+		,case when type = 1 then count(fi.id) else 0 end as followup
+		FROM ass.file_info fi
+		INNER JOIN ass.application_file af
+		ON fi.id=af.file_id
+		INNER JOIN ass.application_info ai
+		ON ai.id=af.application_id
+		INNER JOIN ass.login_info li
+		ON li.id=fi.login_id
+		INNER JOIN ass.agency_info agi
+		ON agi.id=li.agency_id
+		INNER JOIN ass.agency_outlet ao
+		ON ao.id=li.agency_outlet_id
+		INNER JOIN ass.outlet_info oi
+		ON oi.id=ao.outlet_id
+		INNER JOIN ass.time_management tm
+		ON tm.file_id=fi.id
+		<where>
+			fi.status = 3
+
+			<if test="agencyName != null and agencyName != ''">
+				AND LOWER(agency_name) LIKE '%' || LOWER(#{agencyName}) || '%'
+			</if>
+
+			<if test="fromDate != null">
+				AND to_date(to_char(received_time,'YYYY-MM-DD'),'YYYY-MM-DD') &gt;= #{fromDate}::date
+			</if>
+
+			<if test="toDate != null">
+				AND to_date(to_char(received_time,'YYYY-MM-DD'),'YYYY-MM-DD') &lt;= #{toDate}::date
+			</if>
+		</where>
+		GROUP BY agency_name ,outlet_name ,agi.id,fi.type
+		) SUMMARYDATA
+		GROUP BY agentname,outlet_name,id
+		ORDER BY id
+	</select>
+
+	<resultMap id="AppStatusSummaryListResDto"
+		type="mm.aeon.com.ass.base.dto.appStatusSummaryList.AppStatusSummaryListResDto">
+		<result property="sumAgentName" column="agentName" />
+		<result property="sumOutletName" column="outlet_name" />
+		<result property="noOfApp" column="total" />
+		<result property="first" column="firstApply" />
+		<result property="followUp" column="followUp" />
+	</resultMap>
+</mapper>

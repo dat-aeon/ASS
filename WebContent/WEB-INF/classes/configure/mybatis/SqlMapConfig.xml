@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<settings>
+		<setting name="logImpl" value="LOG4J" />
+	</settings>
+
+	<mappers>
+		<mapper resource="configure/mybatis/Admin.xml" />
+		<mapper resource="configure/mybatis/AgencyOutlet.xml" />
+		<mapper resource="configure/mybatis/AgencyName.xml" />
+		<mapper resource="configure/mybatis/AgencyUser.xml" />
+		<mapper resource="configure/mybatis/AppLoginInfo.xml" />
+		<mapper resource="configure/mybatis/OutletName.xml" />
+		<mapper resource="configure/mybatis/LoginInfo.xml" />
+		<mapper resource="configure/mybatis/ReceivingFileList.xml" />
+		<mapper resource="configure/mybatis/ManagementUserInfo.xml"/>
+		<mapper resource="configure/mybatis/AgencyInfo.xml" />
+		<mapper resource="configure/mybatis/AgencyTeam.xml" />
+		<mapper resource="configure/mybatis/TeamAgency.xml" />
+		<mapper resource="configure/mybatis/AgencyOutletDetail.xml" />
+		<mapper resource="configure/mybatis/AgencyUserDetail.xml" />
+		<mapper resource="configure/mybatis/LeadTimeReport.xml"/>
+		<mapper resource="configure/mybatis/LeadTimeAverageReport.xml"/>
+		<mapper resource="configure/mybatis/ReceivedList.xml" />
+		<mapper resource="configure/mybatis/ApplicationAcceptedSituation.xml"/>
+		<mapper resource="configure/mybatis/ApplicationAcceptedTotal.xml"/>
+		<mapper resource="configure/mybatis/RegisteredList.xml" />
+		<mapper resource="configure/mybatis/Operator.xml"/>
+		<mapper resource="configure/mybatis/OperatorTeam.xml"/>
+		<mapper resource="configure/mybatis/Team.xml"/>
+		<mapper resource="configure/mybatis/TeamOperator.xml"/>
+		<mapper resource="configure/mybatis/TeamAgent.xml"/>
+		<mapper resource="configure/mybatis/ApplicationStatus.xml"/>
+		<mapper resource="configure/mybatis/AppStatusSummary.xml"/>
+		<mapper resource="configure/mybatis/Outlet.xml"/>
+		<mapper resource="configure/mybatis/OutletAgency.xml"/>
+		<mapper resource="configure/mybatis/OutletDetail.xml"/>
+		<mapper resource="configure/mybatis/AgencyDetail.xml"/>
+		<mapper resource="configure/mybatis/APKUpload.xml"/>
+		<mapper resource="configure/mybatis/Message.xml"/>
+		<mapper resource="configure/mybatis/AgencyRole.xml"/>
+		<mapper resource="configure/mybatis/JudgementStatus.xml"/>
+		<mapper resource="configure/mybatis/SMSMessage.xml"/>
+		<mapper resource="configure/mybatis/GroupInfo.xml"/>
+		<mapper resource="configure/mybatis/AdminGroup.xml"/>
+		<mapper resource="configure/mybatis/AgencyUserId.xml"/>
+		<mapper resource="configure/mybatis/AgencyUserLoginId.xml"/>
+	</mappers>
+</configuration>

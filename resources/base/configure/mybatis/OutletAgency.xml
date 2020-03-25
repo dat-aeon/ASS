@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="OutletAgency">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.outletAgencySelectList.OutletAgencySelectListReqDto"
+		resultMap="outletAgencySelectListResDto">
+		SELECT ID, AGENCY_NAME
+		FROM AGENCY_INFO
+		<where>
+			<if test="validStatus != null">
+				ISVALID = #{validStatus}
+			</if>
+		</where>
+		ORDER BY AGENCY_NAME
+	</select>
+	<resultMap id="outletAgencySelectListResDto"
+		type="mm.aeon.com.ass.base.dto.outletAgencySelectList.OutletAgencySelectListResDto">
+		<result property="agencyId" column="ID" />
+		<result property="agencyName" column="AGENCY_NAME" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.outletAgencyRefer.OutletAgencyReferReqDto"
+		resultMap="outletAgencyReferResDto">
+		SELECT ID, ISVALID
+		FROM AGENCY_INFO
+		<where>
+			<if test="agencyId != null">
+				AND ID = #{agencyId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="outletAgencyReferResDto"
+		type="mm.aeon.com.ass.base.dto.outletAgencyRefer.OutletAgencyReferResDto">
+		<result property="agencyId" column="ID" />
+		<result property="validStatus" column="ISVALID" />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.outletAgencyRegister.OutletAgencyRegisterReqDto">
+		INSERT INTO
+		AGENCY_OUTLET
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				OUTLET_VALID
+			</if>
+			<if test="agencyId != null and agencyId != 0">
+				,AGENCY_ID
+			</if>
+			<if test="outletId != null and outletId != 0">
+				,OUTLET_ID
+			</if>
+			
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				#{validStatus}
+			</if>
+			<if test="agencyId != null and agencyId != 0">
+				,#{agencyId}
+			</if>
+			<if test="outletId != null and outletId != 0">
+				,#{outletId}
+			</if>
+		</trim>
+	</insert>
+	
+	<select id="selectForUpdate"
+		parameterType="mm.aeon.com.ass.base.dto.outletAgencySelectForUpdate.OutletAgencySelectForUpdateReqDto"
+		resultMap="OutletAgencySelectForUpdateResDto">
+		SELECT UPDATE_TIME
+		FROM AGENCY_OUTLET
+		<where>
+			<if test="agencyOutletId != null">
+				ID = #{agencyOutletId}
+			</if>
+		</where>
+	</select>
+	<resultMap type="mm.aeon.com.ass.base.dto.outletAgencySelectForUpdate.OutletAgencySelectForUpdateResDto" id="OutletAgencySelectForUpdateResDto">
+		<result property="updatedTime" column="UPDATE_TIME" />	
+	</resultMap>
+	
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.outletAgencyUpdate.OutletAgencyUpdateReqDto">
+		UPDATE AGENCY_OUTLET
+		<set>
+			<if test="agencyId != null">
+				AGENCY_ID = #{agencyId},
+			</if>
+			<if test="outletId != null">
+				OUTLET_ID = #{outletId},
+			</if>
+			<if test="validStatus != null">
+				OUTLET_VALID = #{validStatus},
+			</if>
+			<if test="updatedTime != null">
+				UPDATE_TIME = #{updatedTime},
+			</if>
+		</set>
+		<where>
+			<if test="agencyOutletId != null">
+				ID = #{agencyOutletId}
+			</if>
+		</where>
+	</update>
+	
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.outletAgencyDelete.OutletAgencyDeleteReqDto">
+		DELETE FROM AGENCY_OUTLET
+		<where>
+			<if test="agencyOutletId != null">
+				ID = #{agencyOutletId}
+			</if>
+			<if test="outletId != null">
+				AND OUTLET_ID = #{outletId}
+			</if>
+		</where>
+	</delete>
+</mapper>

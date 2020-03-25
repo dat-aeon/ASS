@@ -1,0 +1,257 @@
+<!--***********************************************************************
+ * $Date: 2018-07-30 $
+ * $Author: Thar Pyae $
+ * $Rev: 0.1 $
+ * Copyright (c) 2018 DIR-ACE Technology Ltd. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('agencyList_title')}" /></title>
+	</ui:define>
+	<ui:define name="body">
+		<h:form id="agencyListForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="user-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('agencyList_title')}">
+							<p:panelGrid styleClass="list-panel-grid">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:inputText style="width: 100%;"
+											value="#{agencyListFormBean.agencyLisHeaderBean.agencyName}" />
+									</p:column>
+
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('status')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:selectOneMenu id="console" style="width: 100%;"
+											value="#{agencyListFormBean.agencyLisHeaderBean.status}">
+											<f:selectItem itemLabel="" itemValue="" />
+											<f:selectItem itemLabel="Enabled" itemValue="1" />
+											<f:selectItem itemLabel="Disabled" itemValue="0" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton styleClass="button" ajax="false"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								action="#{agencyListFormBean.search()}"
+								style="margin-left:10px; width:133px; float:left; margin-top:1%;" />
+						</p:fieldset>
+
+
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<table>
+							<tr>
+								<td width="60%"><pt:messages /></td>
+								<td width="30%" />
+								<td><p:commandButton id="create"
+										value="#{displayItemBean.getDisplayItemName('createNewAgency')}"
+										styleClass="button"
+										action="#{agencyListFormBean.createNewAgency()}"
+										style="width:200px; float:right; height: 31px;" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+							<p:dataTable var="agency" value="#{agencyListFormBean.lazyModel}"
+								first="#{agencyListFormBean.pageFirst}"
+								rendered="#{agencyListFormBean.lazyModel!= null}"
+								paginator="true" rows="50" id="agencylist" style="width:100%"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" lazy="true" paginatorPosition="top"
+								styleClass="receivedTable" rowIndexVar="rowIndex">
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('no')}"
+									styleClass="unsort-column" style="width:2%">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('agencyName')}"
+									sortBy="#{agency.agencyName}" style="width:27%">
+									<h:outputText value="#{agency.agencyName}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('mobileTeam')}"
+									sortBy="#{agency.mobileTeam}" style="width:15%">
+									<h:outputText value="#{agency.mobileTeam}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('nonMobileTeam')}"
+									sortBy="#{agency.nonMobileTeam}" style="width:15%">
+									<h:outputText value="#{agency.nonMobileTeam}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('location')}"
+									sortBy="#{agency.location}" style="width:12%">
+									<h:outputText value="#{agency.location}" />
+								</p:column>
+
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('operation')}"
+									style="width: 20%;" styleClass="unsort-column"
+									exportable="false">
+
+									<p:commandLink
+										value="#{displayItemBean.getDisplayItemName('update')}"
+										styleClass="management-link"
+										action="#{agencyListFormBean.updateAgency(agency)}"
+										exportable="false">
+									</p:commandLink>
+
+
+									<p:commandLink
+										value="#{displayItemBean.getDisplayItemName('enable')}"
+										styleClass="management-link" update="agencyListForm"
+										onclick="PF('enableDialog').show()"
+										rendered="#{agency.isValid eq 0}" exportable="false">
+										<f:setPropertyActionListener value="#{agency}"
+											target="#{agencyListFormBean.lineBean}" />
+									</p:commandLink>
+
+									<p:commandLink
+										value="#{displayItemBean.getDisplayItemName('disable')}"
+										styleClass="management-link" update="agencyListForm"
+										onclick="PF('disableDialog').show()"
+										rendered="#{agency.isValid eq 1}" exportable="false">
+										<f:setPropertyActionListener value="#{agency}"
+											target="#{agencyListFormBean.lineBean}" />
+									</p:commandLink>
+
+
+									<p:commandLink
+										value="#{displayItemBean.getDisplayItemName('delete')}"
+										styleClass="management-link" update="agencyListForm"
+										onclick="PF('deleteDialog').show()" exportable="false">
+										<f:setPropertyActionListener value="#{agency}"
+											target="#{agencyListFormBean.lineBean}" />
+									</p:commandLink>
+
+									<p:commandLink
+										value="#{displayItemBean.getDisplayItemName('detail')}"
+										action="#{agencyListFormBean.showDetail(agency)}"
+										styleClass="management-link" exportable="false">
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<!-- Confirm Dialog -->
+		<p:confirmDialog id="enableConfirm" showEffect="fade"
+			hideEffect="fade" style="background-color:#302873"
+			widgetVar="enableDialog" severity="alert" closable="false">
+			<h:form>
+				<p:commandButton value="Yes" icon="ui-icon-check" ajax="false"
+					action="#{agencyListFormBean.changeValid()}"
+					oncomplete="PF('validDialog').hide()"
+					styleClass="ui-confirmdialog-yes button" exportable="false" />
+
+				<p:commandButton value="No" icon="ui-icon-close"
+					styleClass="ui-confirmdialog-no button"
+					onclick="PF('validDialog').hide();" exportable="false" />
+			</h:form>
+			<f:facet name="header">
+				<p:outputPanel>
+					<h:outputFormat value="Confimation" escape="false" />
+				</p:outputPanel>
+			</f:facet>
+			<f:facet name="message">
+				<p:outputPanel>
+					<h:outputFormat value="Are you sure to enable?" escape="false" />
+				</p:outputPanel>
+			</f:facet>
+
+		</p:confirmDialog>
+
+		<p:confirmDialog id="disableConfirm" showEffect="fade"
+			hideEffect="fade" style="background-color:#302873"
+			widgetVar="disableDialog" severity="alert" closable="false">
+			<h:form>
+				<p:commandButton value="Yes" icon="ui-icon-check" ajax="false"
+					action="#{agencyListFormBean.changeValid()}"
+					oncomplete="PF('disableDialog').hide()"
+					styleClass="ui-confirmdialog-yes button" exportable="false" />
+
+				<p:commandButton value="No" icon="ui-icon-close"
+					styleClass="ui-confirmdialog-no button"
+					onclick="PF('disableDialog').hide();" exportable="false" />
+			</h:form>
+			<f:facet name="header">
+				<p:outputPanel>
+					<h:outputFormat value="Confimation" escape="false" />
+				</p:outputPanel>
+			</f:facet>
+			<f:facet name="message">
+				<p:outputPanel>
+					<h:outputFormat value="Are you sure to disable?" escape="false" />
+				</p:outputPanel>
+			</f:facet>
+
+		</p:confirmDialog>
+
+		<p:confirmDialog id="deleteConfirm" showEffect="fade"
+			hideEffect="fade" style="background-color:#302873"
+			widgetVar="deleteDialog" severity="alert" closable="false">
+			<h:form>
+				<p:commandButton value="Yes" icon="ui-icon-check" ajax="false"
+					action="#{agencyListFormBean.delete()}"
+					oncomplete="PF('deleteDialog').hide()"
+					styleClass="ui-confirmdialog-yes button" exportable="false" />
+
+				<p:commandButton value="No" icon="ui-icon-close"
+					styleClass="ui-confirmdialog-no button"
+					onclick="PF('deleteDialog').hide();" exportable="false" />
+			</h:form>
+			<f:facet name="header">
+				<p:outputPanel>
+					<h:outputFormat value="Confimation" escape="false" />
+				</p:outputPanel>
+			</f:facet>
+			<f:facet name="message">
+				<p:outputPanel>
+					<h:outputFormat value="Are you sure to delete?" escape="false" />
+				</p:outputPanel>
+			</f:facet>
+
+		</p:confirmDialog>
+	</ui:define>
+</ui:composition>

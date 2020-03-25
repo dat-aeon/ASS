@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AgencyOutletDetail">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailOutletReqDto"
+		resultMap="AgencyListDetailOutletResDto">
+		SELECT
+		outlet_info.id
+		,outlet_name
+		FROM outlet_info
+		INNER JOIN agency_outlet
+		ON outlet_info.id = agency_outlet.outlet_id
+		INNER JOIN agency_info
+		ON agency_info.id = agency_outlet.agency_id
+		<where>
+			<!-- outlet_info.isvalid = 1 -->
+			<if test="agencyId != 0">
+				AND agency_id = #{agencyId}
+			</if>
+		</where>
+		ORDER BY outlet_name;
+	</select>
+
+	<resultMap id="AgencyListDetailOutletResDto"
+		type="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailOutletResDto">
+		<result property="outletName" column="outlet_name" />
+		<result property="outletId" column="id" />
+	</resultMap>
+</mapper>

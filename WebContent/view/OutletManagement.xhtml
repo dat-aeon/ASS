@@ -1,0 +1,186 @@
+<!--***********************************************************************
+ * $Date: 2018-06-20$
+ * $Author: Swe Hsu Mon $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName((outletManagementFormBean.managementHeaderBean.forUpdate)?'outletUpdate':'outletRegister')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="outletRegisterForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset"
+							style="width: 550px !important;"
+							legend="#{displayItemBean.getDisplayItemName((outletManagementFormBean.managementHeaderBean.forUpdate)?'outletUpdate':'outletRegister')}">
+							<span class="message-style"><pt:messages /></span>
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('outletName')}" />
+										<h:outputText styleClass="star" value=" *" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:inputText id="outletName"
+											value="#{outletManagementFormBean.managementHeaderBean.outletName}"
+											placeholder="#{displayItemBean.getDisplayItemName('outletName')}"
+											style="width:250px;" disabled="#{outletManagementFormBean.isHeadOffice}"/>
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+										<h:outputText styleClass="star" value=" *" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:selectOneMenu id="agencyName" style="width:350px;"
+											autoWidth="false"
+											disabled="#{outletManagementFormBean.managementHeaderBean.forUpdate}"
+											value="#{outletManagementFormBean.managementHeaderBean.agencyId}">
+											<f:selectItems
+												value="#{outletManagementFormBean.agencySelectItemList}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('address')}" />
+										<h:outputText styleClass="star" value=" *" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:inputText id="address"
+											value="#{outletManagementFormBean.managementHeaderBean.address}"
+											placeholder="#{displayItemBean.getDisplayItemName('address')}"
+											style="width:250px;" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('phoneNumber')}" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:inputText id="phoneno"
+											value="#{outletManagementFormBean.managementHeaderBean.phoneNo}" maxlength="13"
+											placeholder="#{displayItemBean.getDisplayItemName('phoneNumber')}"
+											style="width:250px;" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column styleClass="tblSingleLabel">
+										<h:outputLabel id="attckmentImage" value="#{displayItemBean.getDisplayItemName('outletImage')}" />
+									</p:column>
+									<p:column styleClass="tblSingleInput import_btn" id="outletImageUpload">
+										<h:outputLabel id="test" value="#{displayItemBean.getDisplayItemName('outletImageInfo')}" styleClass="tblSingleLabel" style="color:#004DFE;background-color: transparent;" />
+										<div style="height: 10px;"></div>
+										<p:fileUpload id="outletImage" fileLimit="1" value="#{outletManagementFormBean.outletManagementImageBean.outletImage}"
+											fileUploadListener="#{outletManagementFormBean.uploadImage}" oncomplete="doFinishedImage(this);" mode="advanced" allowTypes="/(\.|\/)(png)$/" styleClass="file"
+											label="Browse" />
+										<p:remoteCommand name="importImage" update="outletRegisterForm:outletImageUpload outletRegisterForm:outletImageDisplay"
+											action="#{outletManagementFormBean.importImage()}" />
+										<script type="text/javascript">
+											function doFinishedImage(fileupload) {
+												if (fileupload.files.length == 0) {
+													importImage();
+												}
+											}
+										</script>
+									</p:column>
+									<p:column id="outletImageDisplay">
+										<p:graphicImage url="#{outletManagementFormBean.tempUploadImageFilePath}" style="width:50px;height:auto;">
+										</p:graphicImage>
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('latitude')}" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:inputText id="latitude"
+											value="#{outletManagementFormBean.managementHeaderBean.latitude}"
+											placeholder="#{displayItemBean.getDisplayItemName('latitude')}" maxlength="20"
+											style="width:250px;" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('longitude')}" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:inputText id="longitude"
+											value="#{outletManagementFormBean.managementHeaderBean.longitude}"
+											placeholder="#{displayItemBean.getDisplayItemName('longitude')}" maxlength="20"
+											style="width:250px;" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('remark')}" />
+									</p:column>
+									<p:column colspan="2" styleClass="status-panel-grid-column"
+										style="width:350px;">
+										<p:inputTextarea id="remark"
+											placeholder="#{displayItemBean.getDisplayItemName('remark')}"
+											value="#{outletManagementFormBean.managementHeaderBean.remark}"
+											cols="40" rows="6" maxlength="500" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton
+								value="#{displayItemBean.getDisplayItemName('register')}"
+								action="#{outletManagementFormBean.register()}"
+								rendered="#{!outletManagementFormBean.managementHeaderBean.forUpdate}"
+								id="registerButton" style="margin-top: 2%;" ajax="false"
+								styleClass="button" />
+							<p:commandButton
+								value="#{displayItemBean.getDisplayItemName('update')}"
+								action="#{outletManagementFormBean.update()}"
+								rendered="#{outletManagementFormBean.managementHeaderBean.forUpdate}"
+								id="updateButton" style="margin-top: 2%;" ajax="false"
+								styleClass="button" />
+							<p:commandButton
+								value="#{displayItemBean.getDisplayItemName('cancel')}"
+								action="#{outletManagementFormBean.back()}" id="cancelButton"
+								style="margin-top: 2%;" ajax="false" styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

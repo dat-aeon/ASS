@@ -1,0 +1,841 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages xmlns="http://jboss.org/schema/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.org/schema/seam/pages http://jboss.org/schema/seam/pages-2.3.xsd"
+	no-conversation-view-id="/view/Error.xhtml" login-view-id="/view/Login.xhtml">
+
+	<page view-id="*">
+		<navigation>
+			<rule if-outcome="logout">
+				<redirect view-id="/view/Login.xhtml" />
+			</rule>
+
+			<rule if-outcome="AdminSearch">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/AdminList.xhtml" />
+			</rule>
+
+			<rule if-outcome="AgencyUserList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/AgencyUserList.xhtml" />
+			</rule>
+
+			<rule if-outcome="InitializePassword">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/InitializePassword.xhtml" />
+			</rule>
+
+			<rule if-outcome="RemainingList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/RemainingList.xhtml" />
+			</rule>
+
+			<rule if-outcome="StaffRegister">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/StaffRegister.xhtml" />
+			</rule>
+
+			<rule if-outcome="StaffSearch">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/StaffSearch.xhtml" />
+			</rule>
+
+			<rule if-outcome="ReceivingFileList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/ReceivingFileList.xhtml" />
+			</rule>
+
+			<rule if-outcome="OperatorList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/OperatorList.xhtml" />
+			</rule>
+
+			<rule if-outcome="AgencyList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+			
+			<rule if-outcome="LeadTimeReport">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/LeadTimeReport.xhtml" />
+			</rule>
+
+			<rule if-outcome="ReceivedList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/ReceivedList.xhtml" />
+			</rule>
+
+			<rule if-outcome="RegisteredList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/RegisteredList.xhtml" />
+			</rule>
+
+			<rule if-outcome="ApplicationStatus">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/ApplicationStatus.xhtml" />
+			</rule>
+
+			<rule if-outcome="ApplicationAccepted">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/ApplicationAccepted.xhtml" />
+			</rule>
+
+			<rule if-outcome="TeamList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+						
+			<rule if-outcome="OutletList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+			
+			<rule if-outcome="APKUpload">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/APKUpload.xhtml" />
+			</rule>
+			
+			<rule if-outcome="MsgContent">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/MsgContent.xhtml" />
+			</rule>
+			
+			<rule if-outcome="MsgHistory">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/MsgHistory.xhtml" />
+			</rule>
+			
+			<rule if-outcome="JudgementStatusUpload">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/JudgementStatusUpload.xhtml" />
+			</rule>
+			
+			<rule if-outcome="JudgementStatusList">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/JudgementStatusList.xhtml" />
+			</rule>
+			
+			<rule if-outcome="SMSMessage">
+				<end-conversation before-redirect="true" root="false" />
+				<redirect view-id="/view/SMSmessageSending.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/Login.xhtml" login-required="false">
+		<action execute="#{loginFormBean.init()}" if="#{loginFormBean.loginInitFlag}" />
+		<navigation>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/ReceivedList.xhtml" />
+			</rule>
+			<rule if-outcome="application">
+				<redirect view-id="/view/ApplicationStatus.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/Login.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/Welcome.xhtml" login-required="true">
+		<begin-conversation join="true" />
+	</page>
+
+	<page view-id="/view/AgencyUserList.xhtml" login-required="true">
+		<action execute="#{agencyUserListFormBean.init()}" if="#{agencyUserListFormBean.init}" />
+		<action execute="#{agencyUserListFormBean.listingAgencyUser()}"
+			if="#{agencyUserListFormBean.doReload}" />
+		<navigation>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AgencyUserList.xhtml" />
+			</rule>
+
+			<rule if-outcome="init">
+				<redirect view-id="/view/AgencyUserList.xhtml" />
+			</rule>
+
+			<rule if-outcome="error">
+				<redirect view-id="/view/AgencyUserList.xhtml" />
+			</rule>
+
+			<rule if-outcome="updateInit">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+
+			<rule if-outcome="register">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+
+			<rule if-outcome="detail">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AgencyUserRegister.xhtml" login-required="true">
+		<action execute="#{agencyUserManagementFormBean.init()}"
+			if="#{agencyUserManagementFormBean.isInit and agencyUserManagementFormBean.updateParam == null 
+			and agencyUserManagementFormBean.detailParam == null}" />
+		<action execute="#{agencyUserManagementFormBean.updateInit()}"
+			if="#{agencyUserManagementFormBean.isInit and agencyUserManagementFormBean.updateParam != null}" />
+		<action execute="#{agencyUserManagementFormBean.showDetail()}"
+			if="#{agencyUserManagementFormBean.isInit and agencyUserManagementFormBean.detailParam != null}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/AgencyUserList.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/AgencyUserList.xhtml" />
+			</rule>
+			<rule if-outcome="detailOutlet">
+				<redirect view-id="/view/OutletDetail.xhtml" />
+			</rule>
+			<rule if-outcome="detailAgency">
+				<redirect view-id="/view/AgencyDetail.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/InitializePassword.xhtml" login-required="true">
+		<action execute="#{initializePasswordFormBean.init()}" if="#{initializePasswordFormBean.isInit}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/InitializePassword.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/InitializePassword.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/InitializePassword.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/StaffSearch.xhtml" login-required="true">
+		<action execute="#{staffSearchFormBean.init()}" if="#{staffSearchFormBean.init}" />
+		<action execute="#{staffSearchFormBean.search()}" if="#{staffSearchFormBean.updateParam.isUpdate}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/StaffSearch.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/StaffSearch.xhtml" />
+			</rule>
+			<rule if-outcome="updateInit">
+				<redirect view-id="/view/StaffRegister.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/ReceivingFileList.xhtml" login-required="true">
+		<action execute="#{receivingFileListFormBean.init()}" if="#{receivingFileListFormBean.init}" />
+		<action execute="#{receivingFileListFormBean.search()}" if="#{receivingFileListFormBean.isUpdate}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/ReceivingFileList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/ReceivingFileList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/ReceivingFileList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AdminList.xhtml" login-required="true">
+		<action execute="#{adminListFormBean.init()}" if="#{adminListFormBean.init}" />
+		<action execute="#{adminListFormBean.search()}" if="#{adminListFormBean.doReload}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/AdminList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AdminList.xhtml" />
+			</rule>
+			<rule if-outcome="updateInit">
+				<redirect view-id="/view/AdminRegister.xhtml" />
+			</rule>
+			<rule if-outcome="register">
+				<redirect view-id="/view/AdminRegister.xhtml" />
+			</rule>
+			<rule if-outcome="update">
+				<redirect view-id="/view/AdminRegister.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AdminRegister.xhtml" login-required="true">
+		<action execute="#{adminManagementFormBean.init()}"
+			if="#{adminManagementFormBean.init and adminManagementFormBean.updateParam == null}" />
+		<action execute="#{adminManagementFormBean.updateInit()}"
+			if="#{adminManagementFormBean.init and adminManagementFormBean.updateParam != null}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/AdminRegister.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/AdminRegister.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AdminRegister.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/AdminList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/OperatorList.xhtml" login-required="true">
+		<action execute="#{operatorListFormBean.init()}" if="#{operatorListFormBean.init}" />
+		<action execute="#{operatorListFormBean.search()}" if="#{operatorListFormBean.doReload}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/OperatorList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/OperatorList.xhtml" />
+			</rule>
+			<rule if-outcome="updateInit">
+				<redirect view-id="/view/OperatorManagement.xhtml" />
+			</rule>
+			<rule if-outcome="register">
+				<redirect view-id="/view/OperatorManagement.xhtml" />
+			</rule>
+			<rule if-outcome="detail">
+				<redirect view-id="/view/OperatorDetail.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/OperatorManagement.xhtml" login-required="true">
+		<action execute="#{operatorManagementFormBean.init()}" if="#{operatorManagementFormBean.init}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/OperatorManagement.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/OperatorManagement.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/OperatorManagement.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/OperatorList.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/OperatorList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/OperatorDetail.xhtml" login-required="true">
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/OperatorDetail.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/OperatorList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AgencyList.xhtml" login-required="true">
+		<action execute="#{agencyListFormBean.init()}" if="#{agencyListFormBean.init}" />
+		<action execute="#{agencyListFormBean.search()}" if="#{agencyListFormBean.doReload}" />
+<!-- 		<action execute="#{agencyListFormBean.search()}" -->
+<!-- 			if="#{agencyListFormBean.isSearch and agencyListFormBean.updateParam != null and agencyListFormBean.detailParam != null}" /> -->
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+			<rule if-outcome="updateInit">
+				<redirect view-id="/view/AgencyUpdate.xhtml" />
+			</rule>
+			<rule if-outcome="detail">
+				<redirect view-id="/view/AgencyDetail.xhtml" />
+			</rule>
+			<rule if-outcome="register">
+				<redirect view-id="/view/AgencyRegister.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AgencyRegister.xhtml" login-required="true">
+	<action execute="#{agencyListManagementFormBean.init()}" if="#{agencyListManagementFormBean.init}"/>
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/AgencyRegister.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/AgencyRegister.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AgencyRegister.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AgencyUpdate.xhtml" login-required="true">
+	<action execute="#{agencyListManagementFormBean.init()}" if="#{agencyListManagementFormBean.init}"/>
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/AgencyUpdate.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/AgencyUpdate.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/AgencyDetail.xhtml" login-required="true">
+		<action execute="#{agencyListManagementFormBean.detailInit()}" />
+<!-- 		<action execute="#{agencyListManagementFormBean.detailInit()}" if="#{agencyListManagementFormBean.doReload}"/> -->
+<!-- 		<action execute="#{agencyListManagementFormBean.detailInit()}" -->
+<!-- 			if="#{agencyListManagementFormBean.isDetial and agencyListManagementFormBean.detailParam != null}" /> -->
+		<navigation>
+			<rule if-outcome="search">
+				<redirect view-id="/view/AgencyList.xhtml" />
+			</rule>
+			<rule if-outcome="detailOutlet">
+				<redirect view-id="/view/OutletDetail.xhtml" />
+			</rule>
+			<rule if-outcome="detailTeam">
+				<redirect view-id="/view/TeamDetail.xhtml" />
+			</rule>
+			<rule if-outcome="detailAgencyUser">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/LeadTimeReport.xhtml" login-required="true">
+		<action execute="#{leadTimeReportFormBean.init()}" if="#{leadTimeReportFormBean.init}" />
+		<action execute="#{leadTimeReportFormBean.search()}" if="#{leadTimeReportFormBean.isUpdate}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/LeadTimeReport.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/LeadTimeReport.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/LeadTimeReport.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/ReceivedList.xhtml" login-required="true">
+		<action execute="#{receivedListFormBean.init()}" if="#{receivedListFormBean.init}" />
+		<action execute="#{receivedListFormBean.search()}" if ="#{receivedListFormBean.isSearch}"/>
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/ReceivedList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/ReceivedList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/ReceivedList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/ApplicationAccepted.xhtml" login-required="true">
+		<action execute="#{applicationAcceptedFormBean.init()}" if="#{applicationAcceptedFormBean.init}" />
+		<action execute="#{applicationAcceptedFormBean.search()}" if="#{applicationAcceptedFormBean.isUpdate}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/ApplicationAccepted.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/ApplicationAccepted.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/ApplicationAccepted.xhtml" />
+			</rule>
+			<rule if-outcome="receivingFile">
+				<redirect view-id="/view/ReceivingFileList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/TeamList.xhtml" login-required="true">
+		<action execute="#{teamListFormBean.init()}" if="#{teamListFormBean.init}" />
+		<action execute="#{teamListFormBean.search()}" if="#{teamListFormBean.doReload}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+			<rule if-outcome="register">
+				<redirect view-id="/view/TeamManagement.xhtml" />
+			</rule>
+			<rule if-outcome="detail">
+				<redirect view-id="/view/TeamDetail.xhtml" />
+			</rule>
+			<rule if-outcome="update">
+				<redirect view-id="/view/TeamManagement.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/TeamManagement.xhtml" login-required="true">
+		<action execute="#{teamManagementFormBean.init()}" if="#{teamManagementFormBean.init}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/TeamManagement.xhtml" />
+			</rule>
+			<rule if-outcome="register">
+				<redirect view-id="/view/TeamManagement.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/TeamManagement.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/TeamDetail.xhtml" login-required="true">
+		<action execute="#{teamListFormBean.detail()}"/>
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/TeamDetail.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/TeamList.xhtml" />
+			</rule>
+			<rule if-outcome="detailAgency">
+				<redirect view-id="/view/AgencyDetail.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/ApplicationStatus.xhtml" login-required="true">
+		<action execute="#{appStatusCheckFormBean.init()}" if="#{appStatusCheckFormBean.init}" />
+		<action execute="#{appStatusCheckFormBean.search()}" if="#{appStatusCheckFormBean.isSearch}"/>
+		<navigation>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/ApplicationStatus.xhtml" />
+			</rule>
+			<rule if-outcome="init">
+				<redirect view-id="/view/ApplicationStatus.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/ApplicationStatus.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/RegisteredList.xhtml" login-required="true">
+		<action execute="#{registeredListFormBean.init()}" if="#{registeredListFormBean.init}" />
+		<action execute="#{registeredListFormBean.search()}" if="#{registeredListFormBean.isSearch}"/> 
+		<navigation>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/RegisteredList.xhtml" />
+			</rule>
+			<rule if-outcome="init">
+				<redirect view-id="/view/RegisteredList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/RegisteredList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/OutletList.xhtml" login-required="true">
+ 		<action execute="#{outletListFormBean.init()}" if="#{outletListFormBean.init}" />
+ 		<action execute="#{outletListFormBean.search()}" if="#{outletListFormBean.doReload}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+			<rule if-outcome="register">
+				<redirect view-id="/view/OutletManagement.xhtml" />
+			</rule>
+			<rule if-outcome="detail">
+				<redirect view-id="/view/OutletDetail.xhtml" />
+			</rule>
+			<rule if-outcome="updateInit">
+				<redirect view-id="/view/OutletManagement.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/OutletManagement.xhtml" login-required="true">
+		<action execute="#{outletManagementFormBean.init()}" if="#{outletManagementFormBean.init}"/>
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/OutletManagement.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/OutletManagement.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/OutletManagement.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/OutletDetail.xhtml" login-required="true">
+		<action execute="#{outletListFormBean.detail()}"/>
+		<navigation>
+			<rule if-outcome="search">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/OutletList.xhtml" />
+			</rule>
+			<rule if-outcome="detailAgency">
+				<redirect view-id="/view/AgencyDetail.xhtml" />
+			</rule>
+			<rule if-outcome="detailAgencyUser">
+				<redirect view-id="/view/AgencyUserRegister.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/APKUpload.xhtml" login-required="true">
+		<action execute="#{apkUploadFormBean.init()}" if="#{apkUploadFormBean.isInit}" />
+		<action execute="#{apkUploadFormBean.upload()}" if="#{apkUploadFormBean.isUpload}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/APKUpload.xhtml" />
+			</rule>
+			<rule if-outcome="upload">
+				<redirect view-id="/view/APKUpload.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/APKUpload.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/APKUpload.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/MsgContent.xhtml" login-required="true">
+		<action execute="#{msgContentFormBean.init()}" if="#{msgContentFormBean.isInit}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/MsgContent.xhtml" />
+			</rule>
+			<rule if-outcome="back">
+				<redirect view-id="/view/ReceivedList.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/MsgContent.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/MsgContent.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/MsgHistory.xhtml" login-required="true">
+		<action execute="#{messageListFormBean.init()}" if="#{messageListFormBean.init}" />
+	</page>
+	
+	<page view-id="/view/JudgementStatusUpload.xhtml" login-required="true">
+		<action execute="#{judgementStatusUploadFormBean.init()}" if="#{judgementStatusUploadFormBean.isInit}" />
+		<action execute="#{judgementStatusUploadFormBean.upload()}" if="#{judgementStatusUploadFormBean.isUpload}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/JudgementStatusUpload.xhtml" />
+			</rule>
+			<rule if-outcome="upload">
+				<redirect view-id="/view/JudgementStatusUpload.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/JudgementStatusUpload.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/JudgementStatusUpload.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/JudgementStatusList.xhtml" login-required="true">
+		<action execute="#{judgementStatusListFormBean.init()}" if="#{judgementStatusListFormBean.init}" />
+		<action execute="#{judgementStatusListFormBean.search()}" if ="#{judgementStatusListFormBean.isSearch}"/>
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/JudgementStatusList.xhtml" />
+			</rule>
+			<rule if-outcome="search">
+				<redirect view-id="/view/JudgementStatusList.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/JudgementStatusList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/view/SMSmessageSending.xhtml" login-required="true">
+		<action execute="#{smsMessageSendFormBean.init()}" if="#{smsMessageSendFormBean.isInit}" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/SMSmessageSending.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/view/SMSmessageSending.xhtml" />
+			</rule>
+			<rule if-outcome="ok">
+				<redirect view-id="/view/SMSmessageSending.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	<page view-id="/view/Error.xhtml" login-required="false">
+		<end-conversation before-redirect="true" root="true" />
+		<navigation>
+			<rule if-outcome="init">
+				<redirect view-id="/view/Login.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<!-- Exception that occurs when uploading exceeds the file's maximum size -->
+	<exception class="org.jboss.seam.web.FileUploadException"
+		log-level="INFO">
+		<redirect view-id="/view/Error.xhtml">
+			<message>File size exceeds 2MB.</message>
+		</redirect>
+	</exception>
+
+	<!-- Exception that occurs when conversation control is not correctly done -->
+	<exception class="org.jboss.seam.ConcurrentRequestTimeoutException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message>Processing was interrupted. Please log in again from the
+				login screen.
+			</message>
+		</redirect>
+	</exception>
+
+	<!-- Exception that occurs when an exception on View occurs -->
+	<exception class="javax.faces.application.ViewExpiredException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message>Processing was interrupted. Please log in again from the
+				login screen.
+			</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.security.AuthorizationException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message severity="ERROR">Authorization problem occurred. Please
+				login again.
+			</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.security.NotLoggedInException"
+		log-level="FATAL">
+		<redirect view-id="/view/Login.xhtml">
+			<message severity="ERROR">Please Log In First.</message>
+		</redirect>
+	</exception>
+
+	<!-- When a service layer exception occurs -->
+	<exception class="mm.com.dat.presto.main.exception.BaseException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message severity="ERROR">An error occurred in the system. Please
+				inform the system administrator.[BaseException]
+			</message>
+		</redirect>
+	</exception>
+
+	<!-- FrontException -->
+	<exception class="mm.aeon.com.ass.front.common.exception.SMSFrontException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message severity="ERROR">An error occurred in the system. Please
+				inform the system administrator.
+			</message>
+		</redirect>
+	</exception>
+
+	<!-- FrontException -->
+	<exception
+		class="mm.aeon.com.ass.front.common.exception.InvalidScreenTransitionException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message severity="ERROR">Access denied. Please log in again from the
+				login screen.
+			</message>
+		</redirect>
+	</exception>
+
+	<!-- PrestoDBException -->
+	<exception class="mm.com.dat.presto.main.exception.PrestoDBException"
+		log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message severity="ERROR">
+				An error occurred in the system. Please
+				inform the system administrator.
+			</message>
+		</redirect>
+	</exception> 
+
+	<exception class="java.lang.Exception" log-level="FATAL">
+		<redirect view-id="/view/Error.xhtml">
+			<message severity="ERROR">An error occurred in the system. Please
+				inform the system administrator.[Exception]
+			</message>
+		</redirect>
+	</exception>
+
+	<!-- EXCEPTION HANDLING -->
+
+</pages>

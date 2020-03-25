@@ -1,0 +1,171 @@
+<!--***********************************************************************
+ * $Date: 2018-11-18$
+ * $Author: Khin Yadanar Thein $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('judgementStatusUpload_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="judgementUpload" enctype="multipart/form-data">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="judgementUpload-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('judgementStatusUpload_title')}">
+
+							<span class="message-style"><pt:messages id="messages" /></span>
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top:1%;">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('status')}" />
+										<span class="star">✳</span>
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:500px;">
+										<p:selectOneMenu style="width: 40%;" id="status"
+											value="#{judgementStatusUploadFormBean.headerBean.status}">
+											<f:selectItems
+												value="#{judgementStatusUploadFormBean.headerBean.statusList}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:200px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('file')}" />
+										<span class="star">✳</span>
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:400px;">
+										<p:fileUpload
+											value="#{judgementStatusUploadFormBean.headerBean.file}"
+											id="csvFile" mode="simple" fileLimit="1" update="messages"
+											styleClass="button" allowTypes="/(\.|\/)(csv)" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:commandButton value="Upload"
+								style="margin-left: 2%; margin-top:3%;" ajax="false"
+								action="#{judgementStatusUploadFormBean.upload()}"
+								update="judgementStatusResultList"
+								id="searchButton" styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g" style="width: 104%;">
+					<div style="width: 93%; padding-top: 40px;" class="appLabel">
+						<h:outputText value="Result List"
+							rendered="#{judgementStatusUploadFormBean.lineBeanList.size() > 0}" />
+					</div>
+					<div style="padding-top: 25px;">
+						<p:commandButton
+							value="#{displayItemBean.getDisplayItemName('export')}"
+							style="width:80px; float:right; height: 31px;" ajax="false"
+							rendered="#{judgementStatusUploadFormBean.lineBeanList.size() > 0}"
+							id="exportButton" styleClass="button">
+							<p:dataExporter type="xls" target="judgementStatusResultList"
+								fileName="Judgement Result List" />
+
+						</p:commandButton>
+					</div>
+				</div>
+				<div class="ui-g" style="margin-top: -27px;">
+					<div class="ui-g-12">
+						<f:view encoding="utf-8">
+							<p:dataTable var="lineBean"
+								value="#{judgementStatusUploadFormBean.lineBeanList}" rows="50"
+								rendered="#{judgementStatusUploadFormBean.lineBeanList.size() > 0}"
+								paginator="true" rowIndexVar="rowIndex" paginatorPosition="top"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" styleClass="resultTable"
+								style="width:104%;margin-left: 2px;"
+								id="judgementStatusResultList">
+
+								<p:column style="width:20px" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column style="width:100px" sortBy="#{lineBean.judgementDate}"
+									headerText="#{judgementStatusUploadFormBean.dateTitle}">
+									<h:outputText value="#{lineBean.judgementDate}" />
+								</p:column>
+
+								<p:column style="width:160px" sortBy="#{lineBean.agencyName}"
+									headerText="#{displayItemBean.getDisplayItemName('agencyName')}">
+									<h:outputText value="#{lineBean.agencyName}" />
+								</p:column>
+
+								<p:column style="width:160px" sortBy="#{lineBean.outletName}"
+									headerText="#{displayItemBean.getDisplayItemName('outletName')}">
+									<h:outputText value="#{lineBean.outletName}" />
+								</p:column>
+
+								<p:column style="width:110px" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('nrc_title')}">
+									<h:outputText value="#{lineBean.nrc}" />
+								</p:column>
+
+								<p:column style="width:180px" sortBy="#{lineBean.userName}"
+									headerText="#{displayItemBean.getDisplayItemName('userName')}">
+									<h:outputText value="#{lineBean.userName}" />
+								</p:column>
+
+								<p:column style="width:100px" sortBy="#{lineBean.applicationNo}"
+									headerText="#{displayItemBean.getDisplayItemName('applicationNo')}">
+									<h:outputText value="#{lineBean.applicationNo}" />
+								</p:column>
+
+								<p:column style="width:80px" sortBy="#{lineBean.status}"
+									headerText="#{displayItemBean.getDisplayItemName('status')}">
+									<h:outputText value="#{lineBean.status}" />
+								</p:column>
+
+								<p:column style="width:125px" sortBy="#{lineBean.agreementNo}"
+									visible="#{judgementStatusUploadFormBean.headerBean.status == 2}"
+									headerText="#{displayItemBean.getDisplayItemName('agreementNo')}">
+									<h:outputText value="#{lineBean.agreementNo}"/>
+								</p:column>
+
+								<p:column style="width:50px" sortBy="#{lineBean.financeTerm}" 
+									visible="#{judgementStatusUploadFormBean.headerBean.status == 2}"
+									headerText="#{displayItemBean.getDisplayItemName('financeTerm')}">
+									<h:outputText value="#{lineBean.financeTerm}"/>
+								</p:column>
+
+								<p:column style="width:100px" sortBy="#{lineBean.financeAmount}"
+									visible="#{judgementStatusUploadFormBean.headerBean.status == 2}"
+									headerText="#{displayItemBean.getDisplayItemName('financeAmount')}">
+									<h:outputText value="#{lineBean.financeAmount}"/>
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+	</ui:define>
+</ui:composition>

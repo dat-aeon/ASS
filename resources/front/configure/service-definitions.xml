@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.1.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+
+
+	<!-- ************************************************************************************** 
+		************************ Configuration of Service Classes. *************************** 
+		************************************************************************************** -->
+
+	<bean name="AgencyUserRegisterService"
+		class="mm.aeon.com.ass.base.service.agencyUserRegisterService.AgencyUserRegisterService"
+		scope="prototype" />
+
+	<bean name="AgencyUserUpdateService"
+		class="mm.aeon.com.ass.base.service.agencyUserUpdateService.AgencyUserUpdateService"
+		scope="prototype" />
+
+	<bean name="AgencyUserDeleteService"
+		class="mm.aeon.com.ass.base.service.agencyUserDeleteService.AgencyUserDeleteService"
+		scope="prototype" />
+
+	<bean name="InitializePasswordRegisterService"
+		class="mm.aeon.com.ass.base.service.InitializePasswordRegisterService.InitializePasswordRegisterService"
+		scope="prototype" />
+
+	<bean name="InitializePasswordUpdateService"
+		class="mm.aeon.com.ass.base.service.InitializePasswordUpdateService.InitializePasswordUpdateService"
+		scope="prototype" />
+
+	<bean name="AdminRegisterService"
+		class="mm.aeon.com.ass.base.service.adminRegisterService.AdminRegisterService" />
+
+	<bean name="AdminUpdateService"
+		class="mm.aeon.com.ass.base.service.adminUpdateService.AdminUpdateService" />
+
+	<bean name="AdminDeleteService"
+		class="mm.aeon.com.ass.base.service.adminDeleteService.AdminDeleteService" />
+
+	<bean name="AgencyListRegisterService"
+		class="mm.aeon.com.ass.base.service.agencyListRegisterService.AgencyListRegisterService"
+		scope="prototype" />
+
+	<bean name="AgencyListUpdateService"
+		class="mm.aeon.com.ass.base.service.agencyListUpdateService.AgencyListUpdateService"
+		scope="prototype" />
+
+	<bean name="AgencyListChangeValidService"
+		class="mm.aeon.com.ass.base.service.agencyListChangeValidService.AgencyListChangeValidService"
+		scope="prototype" />
+
+	<bean name="AgencyListDeleteService"
+		class="mm.aeon.com.ass.base.service.agencyListDeleteService.AgencyListDeleteService"
+		scope="prototype" />
+
+	<bean name="OperatorRegisterService"
+		class="mm.aeon.com.ass.base.service.operatorRegisterService.OperatorRegisterService"
+		scope="prototype" />
+
+	<bean name="OperatorUpdateService"
+		class="mm.aeon.com.ass.base.service.operatorUpdateService.OperatorUpdateService"
+		scope="prototype" />
+
+	<bean name="OperatorDeleteService"
+		class="mm.aeon.com.ass.base.service.operatorDeleteService.OperatorDeleteService"
+		scope="prototype" />
+
+	<bean name="OperatorTeamRegisterService"
+		class="mm.aeon.com.ass.base.service.operatorTeamRegisterService.OperatorTeamRegisterService"
+		scope="prototype" />
+
+	<bean name="OperatorTeamUpdateService"
+		class="mm.aeon.com.ass.base.service.operatorTeamUpdateService.OperatorTeamUpdateService"
+		scope="prototype" />
+
+	<bean name="OperatorTeamDeleteService"
+		class="mm.aeon.com.ass.base.service.operatorTeamDeleteService.OperatorTeamDeleteService"
+		scope="prototype" />
+
+	<bean name="TeamRegisterService"
+		class="mm.aeon.com.ass.base.service.teamRegisterService.TeamRegisterService"
+		scope="prototype" />
+
+	<bean name="TeamUpdateService"
+		class="mm.aeon.com.ass.base.service.teamUpdateService.TeamUpdateService"
+		scope="prototype" />
+
+	<bean name="TeamDeleteService"
+		class="mm.aeon.com.ass.base.service.teamDeleteService.TeamDeleteService"
+		scope="prototype" />
+
+	<bean name="OutletRegisterService"
+		class="mm.aeon.com.ass.base.service.outletRegisterService.OutletRegisterService"
+		scope="prototype" />
+
+	<bean name="OutletAgencyRegisterService"
+		class="mm.aeon.com.ass.base.service.outletAgencyRegisterService.OutletAgencyRegisterService"
+		scope="prototype" />
+
+	<bean name="OutletUpdateService"
+		class="mm.aeon.com.ass.base.service.outletUpdateService.OutletUpdateService"
+		scope="prototype" />
+
+	<bean name="OutletAgencyUpdateService"
+		class="mm.aeon.com.ass.base.service.outletAgencyUpdateService.OutletAgencyUpdateService"
+		scope="prototype" />
+
+	<bean name="OutletDeleteService"
+		class="mm.aeon.com.ass.base.service.outletDeleteService.OutletDeleteService"
+		scope="prototype" />
+
+	<bean name="OutletAgencyDeleteService"
+		class="mm.aeon.com.ass.base.service.outletAgencyDeleteService.OutletAgencyDeleteService"
+		scope="prototype" />
+
+	<bean name="APKUploadRegisterService"
+		class="mm.aeon.com.ass.base.service.APKUploadRegisterService.APKUploadRegisterService"
+		scope="prototype" />
+
+	<bean name="JudgementStatusUpdateService"
+		class="mm.aeon.com.ass.base.service.judgementStatusUpdateService.JudgementStatusUpdateService"
+		scope="prototype" />
+
+	<bean name="AgencyUserSMSRegisterService"
+		class="mm.aeon.com.ass.base.service.agencyUserSMSRegisterService.AgencyUserSMSRegisterService"
+		scope="prototype" />
+
+	<bean name="AdminGroupRegisterService"
+		class="mm.aeon.com.ass.base.service.adminGroupRegisterService.AdminGroupRegisterService"
+		scope="prototype" />
+
+	<bean name="requestServiceInfoRepository"
+		class="mm.com.dat.presto.main.core.base.controller.RequestServiceInfoRepository">
+
+		<property name="serviceInfoRepository">
+			<map>
+				<!-- *************************************************************************** 
+					********************Configuration Service id and Service Bean************** 
+					*************************************************************************** -->
+
+				<entry key="AGENCYUSERSI">
+					<ref bean="AgencyUserRegisterService" />
+				</entry>
+
+				<entry key="AGENCYUSERSU">
+					<ref bean="AgencyUserUpdateService" />
+				</entry>
+
+				<entry key="AGENCYUSERSD">
+					<ref bean="AgencyUserDeleteService" />
+				</entry>
+
+				<entry key="PASSWORDSI">
+					<ref bean="InitializePasswordRegisterService" />
+				</entry>
+
+				<entry key="PASSWORDSU">
+					<ref bean="InitializePasswordUpdateService" />
+				</entry>
+
+				<entry key="ADMINSI">
+					<ref bean="AdminRegisterService" />
+				</entry>
+
+				<entry key="ADMINSU">
+					<ref bean="AdminUpdateService" />
+				</entry>
+
+				<entry key="ADMINSD">
+					<ref bean="AdminDeleteService" />
+				</entry>
+
+				<entry key="AGENCYREG">
+					<ref bean="AgencyListRegisterService" />
+				</entry>
+
+				<entry key="AGENCYUPD">
+					<ref bean="AgencyListUpdateService" />
+				</entry>
+
+				<entry key="AGENCYDIS">
+					<ref bean="AgencyListChangeValidService" />
+				</entry>
+
+				<entry key="AGENCYDLE">
+					<ref bean="AgencyListDeleteService" />
+				</entry>
+
+				<entry key="OPERATORSI">
+					<ref bean="OperatorRegisterService" />
+				</entry>
+
+				<entry key="OPERATORSU">
+					<ref bean="OperatorUpdateService" />
+				</entry>
+
+				<entry key="OPERATORSD">
+					<ref bean="OperatorDeleteService" />
+				</entry>
+
+				<entry key="OPERATORTEAMSI">
+					<ref bean="OperatorTeamRegisterService" />
+				</entry>
+
+				<entry key="OPERATORTEAMSU">
+					<ref bean="OperatorTeamUpdateService" />
+				</entry>
+
+				<entry key="OPERATORTEAMSD">
+					<ref bean="OperatorTeamDeleteService" />
+				</entry>
+
+				<entry key="TEAMSI">
+					<ref bean="TeamRegisterService" />
+				</entry>
+
+				<entry key="TEAMSU">
+					<ref bean="TeamUpdateService" />
+				</entry>
+
+				<entry key="TEAMSD">
+					<ref bean="TeamDeleteService" />
+				</entry>
+
+				<entry key="OUTLETSI">
+					<ref bean="OutletRegisterService" />
+				</entry>
+
+				<entry key="OUTLETAGENCYSI">
+					<ref bean="OutletAgencyRegisterService" />
+				</entry>
+
+				<entry key="OUTLETSU">
+					<ref bean="OutletUpdateService" />
+				</entry>
+
+				<entry key="OUTLETAGENCYSU">
+					<ref bean="OutletAgencyUpdateService" />
+				</entry>
+
+				<entry key="OUTLETSD">
+					<ref bean="OutletDeleteService" />
+				</entry>
+
+				<entry key="OUTLETAGENCYSD">
+					<ref bean="OutletAgencyDeleteService" />
+				</entry>
+
+				<entry key="APKUPLOADSI">
+					<ref bean="APKUploadRegisterService" />
+				</entry>
+				
+				<entry key="JUDGEMENTUI">
+					<ref bean="JudgementStatusUpdateService" />
+				</entry>
+				
+				<entry key="AGENCYUSERSMSSI">
+					<ref bean="AgencyUserSMSRegisterService"/>
+				</entry>
+				
+				<entry key="ADMINGROUPSI">
+					<ref bean="AdminGroupRegisterService"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean name="serviceInvoker"
+		class="mm.com.dat.presto.main.core.base.controller.ServiceInvoker"
+		scope="prototype">
+		<property name="requestServiceInfoRepository">
+			<ref bean="requestServiceInfoRepository" />
+		</property>
+	</bean>
+
+</beans>

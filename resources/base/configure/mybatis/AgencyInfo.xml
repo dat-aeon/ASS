@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgencyInfo">
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListRegister.AgencyListRegisterReqDto">
+		INSERT
+		INTO agency_info
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="agencyName != null and agencyName != ''">
+				agency_name
+			</if>
+			<if test="location != 2">
+				,location
+			</if>
+			<if test="address != null and address != ''">
+				,address
+			</if>
+			<if test="isValid != null ">
+				,isvalid
+			</if>
+			<if test="isAeon != null ">
+				,isaeon
+			</if>
+			<if test="remark != null and remark != ''">
+				,remark
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,created_by
+			</if>
+			<if test="createdDate != null">
+				,created_time
+			</if>
+			<if test="updatedDate != null">
+				,updated_time
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="agencyName != null and agencyName != ''">
+				#{agencyName}
+			</if>
+			<if test="location != 2">
+				, #{location}
+			</if>
+			<if test="address != null and address != ''">
+				, #{address}
+			</if>
+			<if test="isValid != null ">
+				, #{isValid}
+			</if>
+			<if test="isAeon != null ">
+				, #{isAeon}
+			</if>
+			<if test="remark != null and remark != ''">
+				, #{remark}
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				, #{createdBy}
+			</if>
+			<if test="createdDate != null">
+				, #{createdDate}
+			</if>
+			<if test="updatedDate != null">
+				, #{updatedDate}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="count"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListCount.AgencyListCountReqDto"
+		resultType="int">
+
+		SELECT
+		COUNT(*)
+		FROM
+		(
+		SELECT
+		agency_info.id
+		,agency_info.agency_name
+		,agency_info.location
+		,agency_info.address
+		,agency_info.remark
+		,agency_info.isvalid
+		,agency_info.created_by
+		,agency_info.created_time
+		,agency_info.updated_by
+		,agency_info.updated_time agency_updated_time
+		,agency_info.disabled_time
+		,CASE WHEN (agency_info.team_list[1] = '0') THEN team_list[2] ELSE
+		team_list[5] END as mobile_team_name
+		,CASE WHEN (agency_info.team_list[4] = '1') THEN team_list[5] ELSE
+		team_list[2] END as nonmobile_team_name
+		,CASE WHEN (agency_info.team_list[1] = '0') THEN team_list[3] ELSE
+		team_list[6] END as mobile_team_id
+		,CASE WHEN (agency_info.team_list[4] = '1') THEN team_list[6] ELSE
+		team_list[3] END as nonmobile_team_id
+
+		FROM
+		(
+		SELECT
+		a.id
+		,a.agency_name
+		,a.location
+		,a.address
+		,a.remark
+		,a.isvalid
+		,a.created_by
+		,a.created_time
+		,a.updated_by
+		,a.updated_time
+		,a.disabled_time
+		,regexp_split_to_array(string_agg(concat(target::text ,',', team_name ::text, ',' ,team_id ::text) ,','),',') as team_list
+		FROM agency_info a
+		JOIN team_agency ta
+		ON a.id = ta.agency_id
+		JOIN team_info ti
+		ON ti.id = ta.team_id
+		GROUP BY a.id
+
+		)AS agency_info
+
+
+		<where>
+			<if test="agencyName != null and agencyName != ''">
+				AND LOWER(agency_name) LIKE '%' || LOWER(#{agencyName}) || '%'
+			</if>
+			<if test="isValid != 2">
+				AND agency_info.isvalid = #{isValid}
+			</if>
+		</where>
+
+		GROUP BY agency_info.id
+		,agency_info.agency_name
+		,agency_info.location
+		,agency_info.address
+		,agency_info.remark
+		,agency_info.isvalid
+		,agency_info.created_by
+		,agency_info.created_time
+		,agency_info.updated_by
+		,agency_info.updated_time
+		,agency_info.team_list
+		,agency_info.disabled_time
+
+		) AS COUNTDATA
+
+	</select>
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListSearch.AgencyListSearchReqDto"
+		resultMap="AgencyListSearchResDto">
+		SELECT
+		agency_info.id
+		,agency_info.agency_name
+		,agency_info.location
+		,agency_info.address
+		,agency_info.isaeon
+		,agency_info.remark
+		,agency_info.isvalid
+		,agency_info.created_by
+		,agency_info.created_time
+		,agency_info.updated_by
+		,agency_info.updated_time agency_updated_time
+		,agency_info.disabled_time
+		,CASE WHEN (agency_info.team_list[1] = '0') THEN team_list[2] ELSE
+		team_list[5] END as mobile_team_name
+		,CASE WHEN (agency_info.team_list[4] = '1') THEN team_list[5] ELSE
+		team_list[2] END as nonmobile_team_name
+		,CASE WHEN (agency_info.team_list[1] = '0') THEN team_list[3] ELSE
+		team_list[6] END as mobile_team_id
+		,CASE WHEN (agency_info.team_list[4] = '1') THEN team_list[6] ELSE
+		team_list[3] END as nonmobile_team_id
+
+		FROM
+		(
+		SELECT
+		a.id
+		,a.agency_name
+		,a.location
+		,a.address
+		,a.remark
+		,a.isaeon
+		,a.isvalid
+		,a.created_by
+		,a.created_time
+		,a.updated_by
+		,a.updated_time
+		,a.disabled_time
+		,regexp_split_to_array(string_agg(concat(target::text ,',', team_name ::text, ',' ,team_id ::text) ,','),',') as team_list
+		FROM agency_info a
+		JOIN team_agency ta
+		ON a.id = ta.agency_id
+		JOIN team_info ti
+		ON ti.id = ta.team_id
+		GROUP BY a.id
+
+		)AS agency_info
+		<where>
+			<if test="agencyName != null and agencyName != ''">
+				AND LOWER(agency_name) LIKE '%' || LOWER(#{agencyName}) || '%'
+			</if>
+			<if test="isValid != 2">
+				AND agency_info.isvalid = #{isValid}
+			</if>
+		</where>
+		ORDER BY agency_info.agency_name;
+
+	</select>
+
+	<resultMap id="AgencyListSearchResDto"
+		type="mm.aeon.com.ass.base.dto.agencyListSearch.AgencyListSearchResDto">
+		<result property="agencyId" column="id" />
+		<result property="agencyName" column="agency_name" />
+		<result property="location" column="location" />
+		<result property="address" column="address" />
+		<result property="isAeon" column="isaeon" />
+		<result property="remark" column="remark" />
+		<result property="isValid" column="isvalid" />
+		<result property="mobileTeamId" column="mobile_team_id" />
+		<result property="mobileTeam" column="mobile_team_name" />
+		<result property="nonMobileTeamId" column="nonmobile_team_id" />
+		<result property="nonMobileTeam" column="nonmobile_team_name" />
+		<result property="createdBy" column="created_by" />
+		<result property="createdDate" column="created_time" />
+		<result property="updatedBy" column="updated_by" />
+		<result property="agencyUptDate" column="agency_updated_time" />
+		<result property="disabledDate" column="disabled_time" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.agencyIdRefer.AgencyIdReferReqDto"
+		resultMap="AgencyIdReferResDto">
+
+		SELECT *
+		FROM agency_info
+		<where>
+			<if test="id != 0">
+				id = #{id}
+			</if>
+			<if test="agencyName != null and agencyName != ''">
+				agency_name = #{agencyName}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="AgencyIdReferResDto"
+		type="mm.aeon.com.ass.base.dto.agencyIdRefer.AgencyIdReferResDto">
+		<result property="agencyId" column="id" />
+	</resultMap>
+
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListUpdate.AgencyListUpdateReqDto">
+		UPDATE
+		agency_info
+		SET
+		<if test="updatedBy != null and updatedBy != ''">
+			updated_by = #{updatedBy}
+		</if>
+		<if test="disabledBy != null and disabledBy != ''">
+			disabled_by = #{disabledBy}
+		</if>
+		<if test="updatedDate != null ">
+			, updated_time = #{updatedDate}
+		</if>
+		<if test="disabledDate != null">
+			,disabled_time = #{disabledDate}
+		</if>
+		<if test="agencyName != null and agencyName != ''">
+			, agency_name = #{agencyName}
+		</if>
+		<if test="location != 2 ">
+			, location = #{location}
+		</if>
+		<if test="address != null and address != ''">
+			, address = #{address}
+		</if>
+		<if test="remark != null and remark != ''">
+			, remark=#{remark}
+		</if>
+		<if test="nonValid != 2">
+			, isvalid = #{nonValid}
+		</if>
+		<if test="isAeon != null">
+			, isaeon = #{isAeon}
+		</if>
+
+		<where>
+			<if test="isValid != 2">
+				isvalid = #{isValid}
+			</if>
+			AND id = #{agencyId};
+		</where>
+	</update>
+
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListDelete.AgencyListDeleteReqDto">
+		DELETE
+		FROM agency_info
+		<where>
+			id = #{agencyId}
+		</where>
+	</delete>
+
+	<select id="selectForUpdate"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListSelectForUpdate.AgencyListSelectForUpdateReqDto"
+		resultMap="AgencyListSelectForUpdateResDto">
+
+		SELECT
+		disabled_time
+		,updated_time
+		FROM
+		agency_info
+		<where>
+			id = #{agencyId}
+		</where>
+
+	</select>
+
+	<resultMap id="AgencyListSelectForUpdateResDto"
+		type="mm.aeon.com.ass.base.dto.agencyListSelectForUpdate.AgencyListSelectForUpdateResDto">
+		<result property="disabledTime" column="disabled_time" />
+		<result property="updatedTime" column="updated_time" />
+	</resultMap>
+
+</mapper>

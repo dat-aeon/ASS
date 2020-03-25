@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="TeamOperator">
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.teamDetailOperatorSelectList.TeamDetailOperatorSelectListReqDto"
+		resultMap="TeamDetailOperatorSelectListResDto">
+		SELECT TOP.UPDATE_TIME, OP.NAME, OP.CREATED_BY, OP.ISVALID, OP.DISABLED_BY
+		FROM TEAM_OPERATOR TOP
+		INNER JOIN MANAGEMENT_USER_INFO OP ON
+		TOP.OPERATOR_ID = OP.ID
+		<where>
+			<if test="teamId != null and teamId != 0">
+				TOP.TEAM_ID = #{teamId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="TeamDetailOperatorSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.teamDetailOperatorSelectList.TeamDetailOperatorSelectListResDto">
+		<result property="assignTime" column="UPDATE_TIME" />
+		<result property="operatorName" column="NAME" />
+		<result property="assignBy" column="CREATED_BY" />
+		<result property="validStatus" column="ISVALID"/>
+		<result property="disabledBy" column="DISABLED_BY"/>
+	</resultMap>
+</mapper>

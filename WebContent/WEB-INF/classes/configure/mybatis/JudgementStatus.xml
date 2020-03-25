@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="JudgementStatus">
+
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.judgementStatusSelectList.JudgementStatusSelectListReqDto"
+		resultMap="JudgementStatusSelectListResDto">
+		SELECT 
+			AP.FIRST_APPLY_DATE,
+			AP.ACTUAL_JUDGEMENT_DATE,
+			AG.AGENCY_NAME,
+			OU.OUTLET_NAME,
+			AP.NAME, 
+			AP.APPLICATION_NO,
+			AP.JUDGEMENT_STATUS,
+			AP.JUDGEMENT_UPLOAD_DATE , 
+			AP.NRC
+		FROM
+			ASS.APPLICATION_INFO AP
+		JOIN 
+			ASS.LOGIN_INFO L
+		ON 
+			AP.LOGIN_ID = L.ID
+		JOIN
+			ASS.AGENCY_INFO AG
+		ON
+			L.AGENCY_ID = AG.ID
+		JOIN 
+			ASS.AGENCY_OUTLET AO
+		ON
+			L.AGENCY_OUTLET_ID = AO.ID
+		JOIN
+			ASS.OUTLET_INFO OU
+		ON 
+			AO.OUTLET_ID=OU.ID
+		<where>
+			<if test="isUpload == true">
+				<if test="applicationNo != null and applicationNo != ''">
+					APPLICATION_NO = #{applicationNo}
+				</if>
+
+				<if test="customerName != null and customerName !=''">
+					AND UPPER(AP.NAME) = UPPER(#{customerName})
+				</if>
+			</if>
+			<if test="isUpload == false">
+
+				AP.JUDGEMENT_STATUS > 1
+	
+				<if test="status != null and status != 0">
+					AND AP.JUDGEMENT_STATUS = #{status}
+				</if>
+	
+				<if test="fromDate != null and fromDate != ''">
+					AND AP.JUDGEMENT_UPLOAD_DATE::date <![CDATA[ >= ]]>
+					TO_DATE(#{fromDate},'yyyy/mm/dd')
+				</if>
+	
+				<if test="toDate != null and toDate != ''">
+					AND AP.JUDGEMENT_UPLOAD_DATE::date <![CDATA[ <= ]]>
+					TO_DATE(#{toDate},'yyyy/mm/dd')
+				</if>
+			</if>
+		</where>
+		ORDER BY AP.JUDGEMENT_UPLOAD_DATE
+	</select>
+
+	<resultMap id="JudgementStatusSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.judgementStatusSelectList.JudgementStatusSelectListResDto">
+		<result property="uploadDate" column="judgement_upload_date" />
+		<result property="approveDate" column="actual_judgement_date" />
+		<result property="applyDate" column="first_apply_date" />
+		<result property="userName" column="name" />
+		<result property="agencyName" column="agency_name" />
+		<result property="outletName" column="outlet_name" />
+		<result property="applicationNo" column="application_no" />
+		<result property="status" column="judgement_status" />
+		<result property="firstApplyDate" column="first_apply_date" />
+		<result property="judgementDate" column="actual_judgement_date" />
+		<result property="customerName" column="name" />
+		<result property="nrc" column="nrc" />
+		
+	</resultMap>
+	
+	<select id="count"
+		parameterType="mm.aeon.com.ass.base.dto.applicationNoCount.ApplicationNoCountReqDto"
+		resultType="int">
+		SELECT COUNT(APPLICATION_NO)
+		FROM APPLICATION_INFO
+		<where>
+			<if test="applicationNo != null and applicationNo != ''">
+				APPLICATION_NO = #{applicationNo}
+			</if>
+
+			<if test="customerName != null and customerName !=''">
+				AND UPPER(NAME) = UPPER(#{customerName})
+			</if>
+		</where>
+	</select>
+		
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.judgementStatusUpdate.JudgementStatusUpdateReqDto">
+		UPDATE
+		APPLICATION_INFO
+		SET
+		<if test="status != null and status != 0">
+			JUDGEMENT_STATUS = #{status}
+		</if>
+		<if test="judgementDate != null">
+			,ACTUAL_JUDGEMENT_DATE = #{judgementDate}
+		</if>
+		<if test="agreementNo !=''">
+			,AGREEMENT_NO = #{agreementNo}
+		</if>
+		<if test="financeAmount != 0.0">
+			,FINANCE_AMOUNT = #{financeAmount}
+		</if>
+		<if test="financeTerm != 0">
+			,FINANCE_TERM = #{financeTerm}
+		</if>
+		<if test="updatedBy != null and updatedBy != ''">
+			,JUDGEMENT_UPLOAD_BY = #{updatedBy}
+		</if>
+		<if test="updatedTime != null">
+			,JUDGEMENT_UPLOAD_DATE = #{updatedTime}
+		</if>
+
+		<where>
+			<if test="applicationNo != null and applicationNo !=''">
+				APPLICATION_NO = #{applicationNo}
+			</if>
+
+			<if test="customerName != null and customerName !=''">
+				AND UPPER(NAME) = #{customerName}
+			</if>
+		</where>
+	</update>
+
+</mapper>

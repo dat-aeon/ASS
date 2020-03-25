@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AgencyUserDetail">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailUserReqDto"
+		resultMap="AgencyListDetailResDto">
+		SELECT
+		login_info.id
+		,login_info.name
+		FROM login_info
+		INNER JOIN agency_info
+		ON login_info.agency_id = agency_info.id
+		<where>
+			login_info.isvalid = 1
+			<if test="agencyId != 0">
+				AND agency_info.id = #{agencyId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="AgencyListDetailResDto"
+		type="mm.aeon.com.ass.base.dto.agencyListDetail.AgencyListDetailUserResDto">
+		<result property="userName" column="name" />
+		<result property="userId" column="id" />
+	</resultMap>
+</mapper>

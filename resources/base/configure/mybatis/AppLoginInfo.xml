@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="AppLoginInfo">
+	<select id="count"
+		parameterType="mm.aeon.com.ass.base.dto.appLoginInfoCount.AppLoginInfoCountReqDto"
+		resultType="int">
+		SELECT COUNT(ID)
+		FROM APP_LOGIN_INFO
+	</select>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.appLoginInfoInsert.AppLoginInfoInsertReqDto">
+		INSERT INTO
+		APP_LOGIN_INFO
+
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="password != null and password != ''">
+				PASSWORD
+			</if>
+			<if test="updatedBy != null and updatedBy !=''">
+				,UPDATED_BY
+			</if>
+			<if test="updatedTime != null">
+				,UPDATED_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="password != null and password != ''">
+				#{password}
+			</if>
+			<if test="updatedBy != null and updatedBy !=''">
+				,#{updatedBy}
+			</if>
+			<if test="updatedTime != null">
+				,#{updatedTime}
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.appLoginInfoUpdate.AppLoginInfoUpdateReqDto">
+		UPDATE
+		APP_LOGIN_INFO
+		SET
+
+		<if test="password != null and password != ''">
+			PASSWORD = #{password}
+		</if>
+		<if test="updatedBy != null and updatedBy !=''">
+			,UPDATED_BY = #{updatedBy}
+		</if>
+		<if test="updatedTime != null">
+			,UPDATED_TIME = #{updatedTime}
+		</if>
+	</update>
+</mapper>

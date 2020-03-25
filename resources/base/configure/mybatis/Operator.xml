@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="Operator">
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.operatorSearch.OperatorSearchReqDto"
+		resultMap="OperatorSearchResDto">
+		SELECT U.ID, U.NAME, U.LOGIN_ID, U.ISVALID, U.CREATED_BY,
+		U.CREATED_TIME, U.UPDATED_BY, U.UPDATED_TIME, TOP.TEAM_ID,
+		TI.TEAM_NAME, TI.TARGET, TOP.ID AS TEAM_OPERATOR_ID, TOP.UPDATE_TIME AS TEAMOPERATOR_UPDATE_TIME
+		FROM TEAM_OPERATOR TOP
+		JOIN TEAM_INFO TI ON TI.ID = TOP.TEAM_ID
+		RIGHT JOIN MANAGEMENT_USER_INFO U ON U.ID = TOP.OPERATOR_ID
+		<where>
+			<if test="role != null ">
+				AND U.ROLE = #{role}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND LOWER(U.NAME) LIKE '%' || #{userName} || '%'
+			</if>
+			<if test="userLoginId != null and userLoginId != ''">
+				AND LOWER(U.LOGIN_ID) LIKE '%' || #{userLoginId} || '%'
+			</if>
+			<if test="userValidStatus != null ">
+				AND U.ISVALID = #{userValidStatus}
+			</if>
+		</where>
+		ORDER BY U.ID
+	</select>
+
+	<resultMap id="OperatorSearchResDto"
+		type="mm.aeon.com.ass.base.dto.operatorSearch.OperatorSearchResDto">
+		<result property="userId" column="ID" />
+		<result property="userName" column="NAME" />
+		<result property="userLoginId" column="LOGIN_ID" />
+		<result property="userValidStatus" column="ISVALID" />
+		<result property="createdBy" column="CREATED_BY" />
+		<result property="createdTime" column="CREATED_TIME" />
+		<result property="updatedBy" column="UPDATED_BY" />
+		<result property="updatedTime" column="UPDATED_TIME" />
+		<result property="teamId" column="TEAM_ID" />
+		<result property="teamName" column="TEAM_NAME" />
+		<result property="teamTarget" column="TARGET" />
+		<result property="teamOperatorId" column="TEAM_OPERATOR_ID" />
+		<result property="teamOperatorUpdateTime" column="TEAMOPERATOR_UPDATE_TIME" />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.operatorRegister.OperatorRegisterReqDto">
+		INSERT INTO
+		MANAGEMENT_USER_INFO
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				ISVALID 
+			</if>
+			<if test="role != null">
+				,ROLE 
+			</if>
+			<if test="userLoginId != null and userLoginId != ''">
+				,LOGIN_ID
+			</if>
+			<if test="password != null and password != ''">
+				,PASSWORD
+			</if>
+			<if test="userName != null and userName != ''">
+				,NAME
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,CREATED_BY
+			</if>
+			<if test="createdTime != null">
+				,CREATED_TIME
+				,UPDATED_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				#{validStatus}
+			</if>
+			<if test="role != null">
+				,#{role}
+			</if>
+			<if test="userLoginId != null and userLoginId != ''">
+				,#{userLoginId}
+			</if>
+			<if test="password != null and password != ''">
+				,#{password}
+			</if>
+			<if test="userName != null and userName != ''">
+				,#{userName}
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,#{createdBy}
+			</if>
+			<if test="createdTime != null">
+				,#{createdTime}
+				,#{createdTime}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.operatorRefer.OperatorReferReqDto"
+		resultMap="OperatorReferResDto">
+		SELECT ID
+		FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="userLoginId != null">
+				LOGIN_ID = #{userLoginId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="OperatorReferResDto"
+		type="mm.aeon.com.ass.base.dto.operatorRefer.OperatorReferResDto">
+		<result property="userId" column="ID" />
+	</resultMap>
+	
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.operatorUpdate.OperatorUpdateReqDto">
+		UPDATE MANAGEMENT_USER_INFO
+		<set>
+			<if test="userName != null and userName !=''">
+				NAME = #{userName},
+			</if>
+			<if test="userLoginId != null and userLoginId !=''">
+				LOGIN_ID = #{userLoginId},
+			</if>
+			<if test="password != null and password != ''">
+				PASSWORD = #{password},
+			</if>
+			<if test="updatedBy != null and updatedBy !=''">
+				UPDATED_BY = #{updatedBy},
+			</if>
+			<if test="updatedTime != null">
+				UPDATED_TIME = #{updatedTime},
+			</if>
+			<if test="validStatus != null">
+				ISVALID = #{validStatus},
+				<if test="validStatus == 0">
+					<if test="disabledBy != null and disabledBy !=''">
+						DISABLED_BY = #{disabledBy},
+					</if>
+					<if test="updatedTime != null">
+						DISABLED_TIME = #{updatedTime},
+					</if>
+				</if>
+				<if test="validStatus == 1">
+					DISABLED_BY = null,
+					DISABLED_TIME = null,
+				</if>
+			</if>
+		</set>
+		<where>
+			<if test="userId != null">
+				ID = #{userId}
+			</if>
+		</where>
+	</update>
+	
+	<select id="selectForUpdate"
+		parameterType="mm.aeon.com.ass.base.dto.operatorSelectForUpdate.OperatorSelectForUpdateReqDto"
+		resultMap="OperatorSelectForUpdateResDto">
+		SELECT ID,UPDATED_TIME
+		FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="userId != null">
+				AND ID = #{userId}
+			</if>
+		</where>
+	</select>
+	<resultMap id="OperatorSelectForUpdateResDto"
+		type="mm.aeon.com.ass.base.dto.operatorSelectForUpdate.OperatorSelectForUpdateResDto">
+		<result property="userId" column="ID" />
+		<result property="updatedTime" column="UPDATED_TIME" />
+	</resultMap>
+	
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.operatorDelete.OperatorDeleteReqDto">
+		DELETE FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="userId != null">
+				ID = #{userId}
+			</if>
+		</where>
+	</delete>
+</mapper>

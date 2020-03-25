@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="AgencyRole">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.roleSelectList.RoleSelectListReqDto"
+		resultMap="RoleSelectListResDto">
+
+		SELECT ID, TYPE
+		FROM ROLE_INFO
+		WHERE ISVALID = 1
+
+	</select>
+
+	<resultMap id="RoleSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.roleSelectList.RoleSelectListResDto">
+		<result property="id" column="id" />
+		<result property="type" column="type" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.agencyRoleRefer.AgencyRoleReferReqDto"
+		resultMap="AgencyRoleReferResDto">
+
+		SELECT STRING_AGG(ROLE_ID::CHARACTER VARYING, ',') AS ROLE_ID
+		,STRING_AGG(TYPE, ',') AS ROLE_NAME
+		FROM
+		AGENCY_ROLE A
+		JOIN ROLE_INFO R
+		ON R.ID = A.ROLE_ID
+
+		<where>
+			A.ISVALID = 1
+
+			<if test="agencyId != null and agencyId != 0">
+				AND A.AGENCY_ID = #{agencyId}
+			</if>
+			<if test="roleId != null and roleId != 0">
+				AND A.ROLE_ID = #{roleId}
+			</if>
+		</where>
+
+	</select>
+
+	<resultMap id="AgencyRoleReferResDto"
+		type="mm.aeon.com.ass.base.dto.agencyRoleRefer.AgencyRoleReferResDto">
+		<result property="roleId" column="role_id" />
+		<result property="roleName" column="role_name" />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.agencyRoleInsert.AgencyRoleInsertReqDto">
+		INSERT INTO
+		AGENCY_ROLE
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="agencyId != null and agencyId != 0">
+				AGENCY_ID
+			</if>
+			<if test="roleId != null and roleId != 0">
+				,ROLE_ID
+			</if>
+			<if test="isValid != null">
+				,ISVALID
+			</if>
+			<if test="updatedTime != null">
+				,UPDATED_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="agencyId != null and agencyId != 0">
+				#{agencyId}
+			</if>
+			<if test="roleId != null and roleId != 0">
+				,#{roleId}
+			</if>
+			<if test="isValid != null">
+				,#{isValid}
+			</if>
+			<if test="updatedTime != null">
+				,#{updatedTime}
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.agencyRoleUpdate.AgencyRoleUpdateReqDto">
+		UPDATE
+		AGENCY_ROLE
+		SET
+		<if test="isValid != null">
+			ISVALID = #{isValid}
+		</if>
+		<if test="updatedTime != null">
+			,UPDATED_TIME = #{updatedTime}
+		</if>
+		<where>
+			<if test="agencyId != null and agencyId != 0">
+				AGENCY_ID = #{agencyId}
+			</if>
+			<if test="roleId != null and roleId != 0">
+				AND ROLE_ID = #{roleId}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.agencyRoleDelete.AgencyRoleDeleteReqDto">
+		DELETE FROM AGENCY_ROLE
+		<where>
+			<if test="agencyId != null and agencyId != 0">
+				AGENCY_ID = #{agencyId}
+			</if>
+		</where>
+	</delete>
+
+</mapper>

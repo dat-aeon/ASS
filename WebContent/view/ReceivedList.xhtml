@@ -1,0 +1,138 @@
+<!--***********************************************************************
+ * $Date : 2018-08-17$
+ * $Author : Thar Pyae$
+ * $Rev : 0.1  $
+ * Copyright (c) 2018 DIR-ACE Technology Ltd. All Rights Reserved.
+ ***********************************************************************-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('receivedList_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="receivedListForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="received-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('receivedList_title')}">
+							<p:panelGrid styleClass="list-panel-grid">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:inputText style="width: 100%;"
+											value="#{receivedListFormBean.receivedListHeaderBean.agencyName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('userName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:inputText style="width: 100%;"
+											value="#{receivedListFormBean.receivedListHeaderBean.userName}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:commandButton
+								style="margin-left:10px; width:133px; float:left; margin-top:1%;"
+								ajax="false" action="#{receivedListFormBean.searchInit()}"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<table>
+							<tr>
+								<td width="40%"><pt:messages id="messages" /></td>
+								<td />
+								<td width="100%" align="right"><h:outputText
+										value="#{receivedListFormBean.receivedListHeaderBean.record}"
+										styleClass="recordStyle" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+							<p:poll interval="300"
+								listener="#{receivedListFormBean.search()}" update="receivelist"
+								stop="#{receivedListFormBean.stop}" />
+							<p:dataTable var="receivedStatus" rowIndexVar="rowIndex"
+								value="#{receivedListFormBean.lazyModel}"
+								rendered="#{receivedListFormBean.lazyModel != null}"
+								paginator="true" rows="50" id="receivelist" style="width:100%;"
+								paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" paginatorPosition="top" lazy="true"
+								styleClass="receivedTable">
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('no')}"
+									styleClass="unsort-column" style="width:3%;">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('registrationDate')}"
+									sortBy="#{receivedStatus.registrationDate}" style="width:12%;">
+									<h:outputText value="#{receivedStatus.registrationDate}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('agency')}"
+									sortBy="#{receivedStatus.agency}" style="width:10%;">
+									<h:outputText value="#{receivedStatus.agency}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('outlet')}"
+									sortBy="#{receivedStatus.outlet}" style="width:10%;">
+									<h:outputText value="#{receivedStatus.outlet}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('user')}"
+									sortBy="#{receivedStatus.user}" style="width:10%;">
+									<h:outputText value="#{receivedStatus.user}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('fileName')}"
+									sortBy="#{receivedStatus.fileName}" style="width:50%;">
+									<h:outputText value="#{receivedStatus.fileName}"
+										style="text-align:left !important" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('firstAndFollow')}"
+									sortBy="#{receivedStatus.status}" style="width:10%;">
+									<h:outputText value="#{receivedStatus.status}" />
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

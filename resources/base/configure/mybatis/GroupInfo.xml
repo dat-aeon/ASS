@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="GroupInfo">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.groupSelectList.GroupSelectListReqDto"
+		resultMap="GroupSelectListResDto">
+
+		SELECT ID
+		FROM GROUP_INFO
+
+	</select>
+
+	<resultMap id="GroupSelectListResDto"
+		type="mm.aeon.com.ass.base.dto.groupSelectList.GroupSelectListResDto">
+		<result property="id" column="id" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.groupRefer.GroupReferReqDto"
+		resultMap="GroupReferResDto">
+
+		SELECT ID
+		FROM GROUP_INFO
+		
+		<where>
+			<if test="agencyUserId != null and agencyUserId != 0">
+				AGENCY_USER_ID = #{agencyUserId}
+			</if>
+		</where>
+
+	</select>
+
+	<resultMap id="GroupReferResDto"
+		type="mm.aeon.com.ass.base.dto.groupRefer.GroupReferResDto">
+		<result property="id" column="id" />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.groupInsert.GroupInsertReqDto">
+		INSERT INTO
+		GROUP_INFO
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="agencyUserId != null and agencyUserId != 0">
+				AGENCY_USER_ID
+			</if>
+			<if test="startTime != null">
+				,START_TIME
+			</if>
+			<if test="lastSendTime != null">
+				,LAST_SEND_TIME
+			</if>
+			
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+
+			<if test="agencyUserId != null and agencyUserId != 0">
+				#{agencyUserId}
+			</if>
+			<if test="startTime != null">
+				,#{startTime}
+			</if>
+			<if test="lastSendTime != null">
+				,#{lastSendTime}
+			</if>
+		</trim>
+	</insert>
+	
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.groupDelete.GroupDeleteReqDto">
+		DELETE
+		FROM GROUP_INFO
+		<where>
+			id = #{groupId}
+		</where>
+	</delete>
+</mapper>

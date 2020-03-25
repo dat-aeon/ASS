@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Outlet">
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.outletSearch.OutletSearchReqDto"
+		resultMap="OutletSearchResDto">
+		SELECT OL.ID, 
+		OL.OUTLET_NAME, 
+		OL.ADDRESS, 
+		OL.REMARK, 
+		OL.PHONE_NO,
+		OL.IMAGE_PATH, 
+		OL.LONGITUDE, 
+		OL.LATITUDE, 
+		OL.ISVALID,
+		OL.CREATED_BY, 
+		OL.CREATED_TIME, 
+		OL.UPDATED_BY, 
+		OL.UPDATED_TIME,
+		OL.AGENCY_OUTLET_ID, 
+		OL.AGENCY_OUTLET_UPDATED_TIME, 
+		A.ID AS AGENCY_ID,
+		A.AGENCY_NAME, 
+		A.LOCATION
+		,TEAM_AGENCY.MOBILE_TEAM_NAME,TEAM_AGENCY.NONMOBILE_TEAM_NAME
+		FROM
+		(SELECT O.ID,
+		O.OUTLET_NAME, O.ADDRESS, O.REMARK, O.PHONE_NO, O.LONGITUDE, O.LATITUDE, O.ISVALID, O.CREATED_BY, O.IMAGE_PATH,
+		O.CREATED_TIME, O.UPDATED_BY, O.UPDATED_TIME, AO.AGENCY_ID, AO.ID AS
+		AGENCY_OUTLET_ID, AO.UPDATE_TIME AS AGENCY_OUTLET_UPDATED_TIME
+		FROM OUTLET_INFO O
+		LEFT JOIN AGENCY_OUTLET AO ON O.ID =
+		AO.OUTLET_ID
+		<where>
+			O.DEL_FLAG = 0
+			<if test="validStatus != null">
+				O.ISVALID = #{validStatus}
+			</if>
+			<if test="outletName != null and outletName != ''">
+				AND LOWER(O.OUTLET_NAME) LIKE '%' ||  LOWER(#{outletName}) || '%'
+			</if>
+		</where>
+		)AS OL
+		LEFT JOIN AGENCY_INFO A 
+		ON A.ID = OL.AGENCY_ID
+		JOIN (SELECT AGENCY_INFO.ID,CASE WHEN (AGENCY_INFO.TEAM_LIST[1] = '0') THEN TEAM_LIST[2] ELSE
+		TEAM_LIST[5] END AS MOBILE_TEAM_NAME
+		,CASE WHEN (AGENCY_INFO.TEAM_LIST[4] = '1') THEN TEAM_LIST[5] ELSE
+		TEAM_LIST[2] END AS NONMOBILE_TEAM_NAME
+		,CASE WHEN (AGENCY_INFO.TEAM_LIST[1] = '0') THEN TEAM_LIST[3] ELSE
+		TEAM_LIST[6] END AS MOBILE_TEAM_ID
+		,CASE WHEN (AGENCY_INFO.TEAM_LIST[4] = '1') THEN TEAM_LIST[6] ELSE
+		TEAM_LIST[3] END AS NONMOBILE_TEAM_ID
+		FROM
+		(
+		SELECT AI.ID,REGEXP_SPLIT_TO_ARRAY(STRING_AGG(CONCAT(TARGET::TEXT ,',', TEAM_NAME ::TEXT, ',' ,TEAM_ID ::TEXT) ,','),',') AS TEAM_LIST
+		FROM AGENCY_INFO AI
+		JOIN TEAM_AGENCY TA
+		ON AI.ID = TA.AGENCY_ID
+		JOIN TEAM_INFO TI
+		ON TI.ID = TA.TEAM_ID
+		GROUP BY AI.ID) AS AGENCY_INFO) AS TEAM_AGENCY
+		ON TEAM_AGENCY.ID = A.ID
+		<where>
+			<if test="agencyName != null and agencyName != ''">
+				LOWER(A.AGENCY_NAME) LIKE '%' ||  LOWER(#{agencyName}) || '%'
+			</if>
+		</where>
+		ORDER BY OL.ID
+	</select>
+
+	<resultMap id="OutletSearchResDto"
+		type="mm.aeon.com.ass.base.dto.outletSearch.OutletSearchResDto">
+		<result property="outletId" column="ID" />
+		<result property="outletName" column="OUTLET_NAME"/> 
+		<result property="address" column="ADDRESS" />
+		<result property="remark" column="REMARK"/>
+		<result property="phoneNo" column="PHONE_NO"/>
+		<result property="imagePath" column="IMAGE_PATH"/>
+		<result property="longitude" column="LONGITUDE"/>
+		<result property="latitude" column="LATITUDE"/>
+		<result property="validStatus" column="ISVALID"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="createdTime" column="CREATED_TIME"/>
+		<result property="updatedBy" column="UPDATED_BY"/>
+		<result property="updatedTime" column="UPDATED_TIME"/>
+		<result property="agencyOutletId" column="AGENCY_OUTLET_ID"/>
+		<result property="agencyId" column="AGENCY_ID"/>
+		<result property="agencyName" column="AGENCY_NAME"/>
+		<result property="agencyLocation" column="LOCATION"/>
+		<result property="agencyOutletUpdatedTime" column="AGENCY_OUTLET_UPDATED_TIME"/>
+		<result property="mobileTeamName" column="MOBILE_TEAM_NAME"/>
+		<result property="nonMobileTeamName" column="NONMOBILE_TEAM_NAME"/>
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.outletRegister.OutletRegisterReqDto">
+		INSERT INTO OUTLET_INFO
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				ISVALID
+			</if>
+			<if test="outletName != null and outletName != ''">
+				,OUTLET_NAME
+			</if>
+			<if test="address != null and address != ''">
+				,ADDRESS
+			</if>
+			<if test="remark != null and remark != ''">
+				,REMARK
+			</if>
+			<if test="phoneNo != null and phoneNo != ''">
+				,phone_no
+			</if>
+			<if test="imagePath != null and imagePath != ''">
+				,image_path
+			</if>
+			<if test="latitude != null and latitude != ''">
+				,latitude
+			</if>
+			<if test="longitude != null and longitude != ''">
+				,longitude
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,CREATED_BY
+			</if>
+			<if test="createdTime != null">
+				,CREATED_TIME
+				,UPDATED_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="validStatus != null">
+				#{validStatus}
+			</if>
+			<if test="outletName != null and outletName != ''">
+				,#{outletName}
+			</if>
+			<if test="address != null and address != ''">
+				,#{address}
+			</if>
+			<if test="remark != null and remark != ''">
+				,#{remark}
+			</if>
+			<if test="phoneNo != null and phoneNo != ''">
+				,#{phoneNo}
+			</if>
+			<if test="imagePath != null and imagePath != ''">
+				,#{imagePath}
+			</if>
+			<if test="latitude != null and latitude != ''">
+				,#{latitude}
+			</if>
+			<if test="longitude != null and longitude != ''">
+				,#{longitude}
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,#{createdBy}
+			</if>
+			<if test="createdTime != null">
+				,#{createdTime}
+				,#{createdTime}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.outletRefer.OutletReferReqDto"
+		resultMap="OutletReferResDto">
+		SELECT ID
+		FROM OUTLET_INFO
+		<where>
+			<if test="outletName != null and outletName != ''">
+				OUTLET_NAME = #{outletName}
+			</if>
+		</where>
+	</select>
+	<resultMap type="mm.aeon.com.ass.base.dto.outletRefer.OutletReferResDto" id="OutletReferResDto">
+		<result property="outletId" column="ID" />	
+	</resultMap>
+	
+	<select id="selectForUpdate"
+		parameterType="mm.aeon.com.ass.base.dto.outletSelectForUpdate.OutletSelectForUpdateReqDto"
+		resultMap="OutletSelectForUpdateResDto">
+		SELECT UPDATED_TIME
+		FROM OUTLET_INFO
+		<where>
+			DEL_FLAG = 0
+			<if test="outletId != null">
+				AND ID = #{outletId}
+			</if>
+		</where>
+	</select>
+	<resultMap type="mm.aeon.com.ass.base.dto.outletSelectForUpdate.OutletSelectForUpdateResDto" id="OutletSelectForUpdateResDto">
+		<result property="updatedTime" column="UPDATED_TIME" />	
+	</resultMap>
+	
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.outletUpdate.OutletUpdateReqDto">
+		UPDATE OUTLET_INFO
+		<set>
+			<if test="outletName != null and outletName !=''">
+				OUTLET_NAME = #{outletName},
+			</if>
+			<if test="address != null and address !=''">
+				ADDRESS = #{address},
+			</if>
+				REMARK = #{remark},
+			<if test="imagePath != null and imagePath != ''">
+				IMAGE_PATH = #{imagePath},
+			</if>
+				PHONE_NO = #{phoneNo},
+				LONGITUDE = #{longitude},
+				LATITUDE = #{latitude},
+			<if test="updatedBy != null and updatedBy !=''">
+				UPDATED_BY = #{updatedBy},
+			</if>
+			<if test="updatedTime != null">
+				UPDATED_TIME = #{updatedTime},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag},
+			</if>
+			<if test="validStatus != null">
+				ISVALID = #{validStatus},
+				<if test="validStatus == 0">
+					<if test="updatedBy != null and updatedBy !=''">
+						DISABLED_BY = #{updatedBy},
+					</if>
+					<if test="updatedTime != null">
+						DISABLED_TIME = #{updatedTime},
+					</if>
+				</if>
+				<if test="validStatus == 1">
+					DISABLED_BY = null,
+					DISABLED_TIME = null,
+				</if>
+			</if>
+		</set>
+		<where>
+			<if test="outletId != null">
+				ID = #{outletId}
+			</if>
+		</where>
+	</update>
+	
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.outletDelete.OutletDeleteReqDto">
+		DELETE FROM OUTLET_INFO
+		<where>
+			<if test="outletId != null">
+				ID = #{outletId}
+			</if>
+		</where>
+	</delete>
+</mapper>

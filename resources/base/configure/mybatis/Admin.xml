@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="Admin">
+	<select id="count"
+		parameterType="mm.aeon.com.ass.base.dto.adminCount.AdminCountReqDto"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM MANAGEMENT_USER_INFO
+		WHERE ID = #{id}
+	</select>
+
+	<select id="selectList"
+		parameterType="mm.aeon.com.ass.base.dto.adminSearch.AdminSearchReqDto"
+		resultMap="AdminSearchResDto">
+		SELECT ID,LOGIN_ID,NAME,ISVALID, UPDATED_TIME
+		FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="role != null">
+				ROLE = #{role}
+			</if>
+			<if test="adminName != null and adminName != ''">
+				AND LOWER(NAME) LIKE '%' || LOWER(#{adminName}) || '%'
+			</if>
+			<if test="adminLoginId != null and adminLoginId != ''">
+				AND LOWER(LOGIN_ID) LIKE '%' || LOWER(#{adminLoginId}) || '%'
+			</if>
+			<if test="validStatus == 0 or validStatus == 1">
+				AND ISVALID = #{validStatus}
+			</if>
+		</where>
+		ORDER BY LOGIN_ID
+	</select>
+	<resultMap id="AdminSearchResDto"
+		type="mm.aeon.com.ass.base.dto.adminSearch.AdminSearchResDto">
+		<result property="adminId" column="ID" />
+		<result property="adminName" column="NAME" />
+		<result property="adminLoginId" column="LOGIN_ID" />
+		<result property="validStatus" column="ISVALID" />
+		<result property="updatedDate" column="UPDATED_TIME" />
+	</resultMap>
+
+	<select id="selectForUpdate"
+		parameterType="mm.aeon.com.ass.base.dto.adminSelectForUpdate.AdminSelectForUpdateReqDto"
+		resultMap="AdminSelectForUpdateResDto">
+		SELECT ID,UPDATED_TIME
+		FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="id != null and id != ''">
+				AND ID = #{id}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="AdminSelectForUpdateResDto"
+		type="mm.aeon.com.ass.base.dto.adminSelectForUpdate.AdminSelectForUpdateResDto">
+		<result property="id" column="ID" />
+		<result property="updatedDate" column="UPDATED_TIME" />
+	</resultMap>
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.adminRefer.AdminReferReqDto"
+		resultMap="AdminReferResDto">
+		SELECT ID
+		FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="loginId != null and loginId != ''">
+				AND LOGIN_ID = #{loginId}
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="AdminReferResDto"
+		type="mm.aeon.com.ass.base.dto.adminRefer.AdminReferResDto">
+		<result property="id" column="ID" />
+	</resultMap>
+	
+	<insert id="insert"
+		parameterType="mm.aeon.com.ass.base.dto.adminRegister.AdminRegisterReqDto">
+		INSERT INTO
+		MANAGEMENT_USER_INFO
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="loginId != null and loginId != ''">
+				LOGIN_ID
+			</if>
+			<if test="password != null and password != ''">
+				,PASSWORD
+			</if>
+			<if test="name != null and name != ''">
+				,NAME
+			</if>
+			<if test="role != null">
+				,ROLE
+			</if>
+			<if test="validStatus != null">
+				,ISVALID
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,CREATED_BY
+			</if>
+			<if test="createdTime != null">
+				,CREATED_TIME
+				,UPDATED_TIME
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="loginId != null and loginId != ''">
+				#{loginId}
+			</if>
+			<if test="password != null and password != ''">
+				,#{password}
+			</if>
+			<if test="name != null and name != ''">
+				,#{name}
+			</if>
+			<if test="role != null">
+				,#{role}
+			</if>
+			<if test="validStatus != null">
+				,#{validStatus}
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				,#{createdBy}
+			</if>
+			<if test="createdTime != null">
+				,#{createdTime}
+				,#{createdTime}
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update"
+		parameterType="mm.aeon.com.ass.base.dto.adminUpdate.AdminUpdateReqDto">
+		UPDATE MANAGEMENT_USER_INFO
+		<set>
+			<if test="name != null and name !=''">
+				NAME = #{name},
+			</if>
+			<if test="loginId != null and loginId !=''">
+				LOGIN_ID = #{loginId},
+			</if>
+			<if test="password != null and password != ''">
+				PASSWORD = #{password},
+			</if>
+			<if test="updatedBy != null and updatedBy !=''">
+				UPDATED_BY = #{updatedBy},
+			</if>
+			<if test="updatedDate != null">
+				UPDATED_TIME = #{updatedDate},
+			</if>
+			<if test="isValidStatusToggle">
+				ISVALID = #{validStatus},
+				<if test="validStatus == 0">
+					<if test="disabledBy != null and disabledBy !=''">
+						DISABLED_BY = #{disabledBy},
+					</if>
+					<if test="updatedDate != null">
+						DISABLED_TIME = #{updatedDate},
+					</if>
+				</if>
+				<if test="validStatus == 1">
+					DISABLED_BY = null,
+					DISABLED_TIME = null,
+				</if>
+			</if>
+		</set>
+		<where>
+			<if test="id != null and id !=''">
+				ID = #{id}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete"
+		parameterType="mm.aeon.com.ass.base.dto.adminDelete.AdminDeleteReqDto">
+		DELETE FROM MANAGEMENT_USER_INFO
+		<where>
+			<if test="id != 0">
+				ID = #{id}
+			</if>
+		</where>
+	</delete>
+
+</mapper>

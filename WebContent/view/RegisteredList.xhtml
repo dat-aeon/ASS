@@ -1,0 +1,139 @@
+<!--***********************************************************************
+ * $Date : 2018-08-23 $
+ * $Author : Thar Pyae $
+ * $Rev : 0.1  $
+ * Copyright (c) 2018 DIR-ACE Technology Ltd. All Rights Reserved.
+ ***********************************************************************-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('registeredList_title')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="registeredListForm">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="received-fieldset"
+							legend="#{displayItemBean.getDisplayItemName('registeredList_title')}">
+							<p:panelGrid styleClass="list-panel-grid">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('agencyName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:inputText style="width: 100%;"
+											value="#{registeredListFormBean.registeredListHeaderBean.agencyName}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column tblSingleLabel"
+										style="width:170px;">
+										<h:outputLabel
+											value="#{displayItemBean.getDisplayItemName('userName')}" />
+									</p:column>
+									<p:column styleClass="status-panel-grid-column"
+										style="width:200px;">
+										<p:inputText style="width: 100%;"
+											value="#{registeredListFormBean.registeredListHeaderBean.userName}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:commandButton
+								style="margin-left:10px; width:133px; float:left; margin-top:1%;"
+								ajax="false" action="#{registeredListFormBean.searchInit()}"
+								value="#{displayItemBean.getDisplayItemName('search')}"
+								styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<table>
+							<tr>
+								<td width="40%"><pt:messages id="messages" /></td>
+								<td />
+								<td width="100%" align="right"><h:outputText
+										value="#{registeredListFormBean.registeredListHeaderBean.record}"
+										styleClass="recordStyle" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-12" style="padding-top: 10px;">
+						<f:view encoding="utf-8">
+							<p:poll interval="300"
+								listener="#{registeredListFormBean.search()}"
+								update="registeredlist" stop="#{registeredListFormBean.stop}" />
+							<p:dataTable var="registeredStatus" styleClass="receivedTable"
+								value="#{registeredListFormBean.lazyModel}"
+								rendered="#{registeredListFormBean.lazyModel != null}"
+								paginator="true" rows="50" id="registeredlist"
+								style="width:100%;" lazy="true" rowIndexVar="rowIndex"
+								paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="50,100" paginatorPosition="top">
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('no')}"
+									styleClass="unsort-column" style="width:3%;">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('registrationDate')}"
+									sortBy="#{registeredStatus.registrationDate}"
+									style="width:12%;">
+									<h:outputText value="#{registeredStatus.registrationDate}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('agency')}"
+									sortBy="#{registeredStatus.agency}" style="width:10%;">
+									<h:outputText value="#{registeredStatus.agency}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('outlet')}"
+									sortBy="#{registeredStatus.outlet}" style="width:10%;">
+									<h:outputText value="#{registeredStatus.outlet}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('user')}"
+									sortBy="#{registeredStatus.user}" style="width:10%;">
+									<h:outputText value="#{registeredStatus.user}" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('fileName')}"
+									sortBy="#{registeredStatus.fileName}" style="width:50%;">
+									<h:outputText value="#{registeredStatus.fileName}"
+										style="text-align:left !important" />
+								</p:column>
+
+								<p:column
+									headerText="#{displayItemBean.getDisplayItemName('firstAndFollow')}"
+									sortBy="#{registeredStatus.status}" style="width:10%;">
+									<h:outputText value="#{registeredStatus.status}" />
+								</p:column>
+							</p:dataTable>
+						</f:view>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,239 @@
+<!--***********************************************************************
+ * $Date: 2018-06-20$
+ * $Author: Swe Hsu Mon $
+ * $Rev:  $
+ * 2018 AEON Microfinance (Myanmar) Company	Limited. All Rights Reserved.
+ ***********************************************************************-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://presto.dat.com/tag" template="/layout/template.xhtml">
+
+	<ui:define name="title">
+		<title><h:outputText
+				value="#{displayItemBean.getDisplayItemName('teamDetail')}" /></title>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="teamDetailform">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fieldset styleClass="import-fieldset"
+							style="width:70%!important;"
+							legend="#{displayItemBean.getDisplayItemName('teamDetail')}">
+							<span class="message-style"><pt:messages /></span>
+							<p:panelGrid styleClass="status-panel-grid"
+								style="margin-top: 0%;width:500px" rendered="#{null != teamListFormBean.detailLineBean}">
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('name')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.teamName}" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('noOfAgent')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.noOfAgent}" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('noOfOperator')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.noOfOperator}" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('target')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.targetName}" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('createdBy')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.createdBy}" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('createdTime')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.createdTime}">
+											<f:convertDateTime pattern="yyyy/MM/dd HH:mm" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('updatedBy')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.updatedBy}" />
+									</p:column>
+								</p:row>
+								<p:row styleClass="status-panel-grid-row">
+									<p:column style="width: 200px"
+										styleClass="status-panel-grid-column tblSingleLabel">
+										<h:outputText
+											value="#{displayItemBean.getDisplayItemName('updatedTime')}" />
+									</p:column>
+									<p:column style="width: 300px;"
+										styleClass="status-panel-grid-column">
+										<h:outputText
+											value="#{teamListFormBean.detailLineBean.updatedTime}">
+											<f:convertDateTime pattern="yyyy/MM/dd HH:mm" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<br style="width:100%;clear:both;"/>
+							<p:dataTable var="agentLineBean" paginator="false"
+								rowIndexVar="rowIndex"
+								value="#{teamListFormBean.detailLineBean.agencyLineBeanList}"
+								rendered="#{teamListFormBean.detailLineBean.agencyLineBeanList.size()>0}"
+								style="clear:both;padding-top:10px" styleClass="resultTable"
+								id="agentTable">
+
+								<p:column style="width:2px;" styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column style="width:40px;"
+									sortBy="#{agentLineBean.assignTime}"
+									headerText="#{displayItemBean.getDisplayItemName('assignedDate')}">
+									<h:outputText value="#{agentLineBean.assignTime}">
+										<f:convertDateTime pattern="yyyy/MM/dd HH:mm" />
+									</h:outputText>
+								</p:column>
+
+								<p:column style="width:80px"
+									sortBy="#{agentLineBean.agencyName}"
+									headerText="#{displayItemBean.getDisplayItemName('agentName')}">
+									<h:outputText value="#{agentLineBean.agencyName}" title="#{agentLineBean.agencyName}" />
+								</p:column>
+
+								<p:column style="width:60px" sortBy="#{agentLineBean.assignBy}"
+									headerText="#{displayItemBean.getDisplayItemName('assignedBy')}">
+									<h:outputText value="#{agentLineBean.assignBy}" />
+								</p:column>
+
+								<p:column style="width:20px;"
+									sortBy="#{agentLineBean.validStatus}"
+									headerText="#{displayItemBean.getDisplayItemName('status')}">
+									<h:outputText
+										value="#{displayItemBean.getDisplayItemName((1 == agentLineBean.validStatus)?'enable':'disable')}" />
+								</p:column>
+
+								<p:column style="width:60px"
+									sortBy="#{agentLineBean.disabledBy}"
+									headerText="#{displayItemBean.getDisplayItemName('disabledBy')}">
+									<h:outputText value="#{agentLineBean.disabledBy}" />
+								</p:column>
+							</p:dataTable>
+
+							<p:dataTable var="operatorLineBean"
+								value="#{teamListFormBean.detailLineBean.operatorLineBeanList}"
+								rows="10"
+								rendered="#{teamListFormBean.detailLineBean.operatorLineBeanList.size>0}"
+								paginator="false" rowIndexVar="rowIndex" paginatorPosition="top"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15" styleClass="resultTable"
+								id="operatorTable">
+
+								<p:column style="width:2px;max-width:2px;"
+									styleClass="unsort-column"
+									headerText="#{displayItemBean.getDisplayItemName('no')}">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column style="width:40px;max-width:40px;"
+									sortBy="#{operatorLineBean.assignTime}"
+									headerText="#{displayItemBean.getDisplayItemName('createdDate')}">
+									<h:outputText value="#{operatorLineBean.assignTime}">
+										<f:convertDateTime pattern="yyyy/MM/dd HH:mm" />
+									</h:outputText>
+								</p:column>
+
+								<p:column style="width:80px"
+									sortBy="#{operatorLineBean.operatorName}"
+									headerText="#{displayItemBean.getDisplayItemName('operatorName')}">
+									<h:outputText value="#{operatorLineBean.operatorName}" title="#{operatorLineBean.operatorName}" />
+								</p:column>
+
+								<p:column style="width:60px"
+									sortBy="#{operatorLineBean.assignBy}"
+									headerText="#{displayItemBean.getDisplayItemName('createdBy')}">
+									<h:outputText value="#{operatorLineBean.assignBy}" />
+								</p:column>
+
+								<p:column style="width:20px;max-width:20px;"
+									sortBy="#{operatorLineBean.validStatus}"
+									headerText="#{displayItemBean.getDisplayItemName('status')}">
+									<h:outputText
+										value="#{displayItemBean.getDisplayItemName((1 == operatorLineBean.validStatus)?'enable':'disable')}" />
+								</p:column>
+
+								<p:column style="width:60px"
+									sortBy="#{operatorLineBean.disabledBy}"
+									headerText="#{displayItemBean.getDisplayItemName('disabledBy')}">
+									<h:outputText value="#{operatorLineBean.disabledBy}" />
+								</p:column>
+							</p:dataTable>
+							<p:commandButton
+								value="#{displayItemBean.getDisplayItemName('back')}"
+								action="#{teamListFormBean.detailBack()}" id="backButton"
+								style="margin-top: 2%;" ajax="false" styleClass="button" />
+						</p:fieldset>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

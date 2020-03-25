@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="LoginInfo">
+
+	<select id="refer"
+		parameterType="mm.aeon.com.ass.base.dto.loginInfoRefer.LoginInfoReferReqDto"
+		resultMap="LoginInfoReferResDto">
+		SELECT LOGIN_ID, NAME, PASSWORD, O.OUTLET_NAME
+		FROM LOGIN_INFO L
+		JOIN AGENCY_OUTLET AO
+		ON l.AGENCY_OUTLET_ID = AO.ID
+		JOIN OUTLET_INFO O
+		ON O.ID = AO.OUTLET_ID
+		<where>
+			<if test="loginID != null and loginID != ''">
+				LOGIN_ID = #{loginID}
+			</if>
+			<if test="password != null and password != ''">
+				AND PASSWORD = #{password}
+			</if>
+
+		</where>
+	</select>
+
+	<resultMap id="LoginInfoReferResDto"
+		type="mm.aeon.com.ass.base.dto.loginInfoRefer.LoginInfoReferResDto">
+		<result property="id" column="id" />
+		<result property="loginID" column="login_id" />
+		<result property="name" column="name" />
+		<result property="outletName" column="outlet_name" />
+	</resultMap>
+
+</mapper>
